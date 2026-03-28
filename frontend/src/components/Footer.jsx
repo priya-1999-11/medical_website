@@ -53,10 +53,10 @@ const Footer = () => {
             </li>
             <li>
               <Link
-                to="#"
-                className="text-slate-500 hover:text-blue-600 transition-colors text-sm"
+                to="/admin"
+                className="text-slate-500 hover:text-blue-600 transition-colors text-sm font-semibold"
               >
-                News & Press
+                Staff Portal
               </Link>
             </li>
           </ul>

@@ -1,30 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
-import axios from 'axios';
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
-
+import { supabase } from '@/lib/supabaseClient';
 const HomePage = () => {
   const [doctors, setDoctors] = useState([]);
+  const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
-
-  const fetchDoctors = async () => {
+  const fetchDoctors = useCallback(async () => {
     try {
-      const response = await axios.get(`${API}/doctors?available_today=true`);
-      setDoctors(response.data.slice(0, 3)); // Show only 3 doctors
-      setLoading(false);
+      const { data, error } = await supabase
+        .from('doctors')
+        .select('*')
+        .contains('display_sections', ['meet_specialist'])
+        .eq('available_today', true)
+        .limit(3);
+        
+      if (error) throw error;
+      setDoctors(data || []);
     } catch (error) {
       console.error('Error fetching doctors:', error);
-      setLoading(false);
     }
-  };
+  }, []);
+
+  const fetchDepartments = useCallback(async () => {
+    try {
+      const { data, error } = await supabase.from('departments').select('*').order('name');
+      if (error) throw error;
+      setDepartments(data || []);
+    } catch (error) {
+      console.error('Error fetching departments:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    const init = async () => {
+      setLoading(true);
+      await Promise.all([fetchDoctors(), fetchDepartments()]);
+      setLoading(false);
+    };
+    init();
+  }, [fetchDoctors, fetchDepartments]);
 
   return (
     <div className="min-h-screen bg-surface">
@@ -173,114 +190,42 @@ const HomePage = () => {
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {/* Medicine */}
-              <div className="bg-white p-8 rounded-3xl hover:translate-y-[-8px] transition-transform shadow-sm">
-                <div className="text-primary mb-6">
-                  <span
-                    className="material-symbols-outlined text-4xl"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                  >
-                    medical_services
-                  </span>
-                </div>
-                <h4 className="font-headline font-bold text-xl mb-3">
-                  General Medicine
-                </h4>
-                <p className="text-slate-600 text-sm mb-6 leading-relaxed">
-                  Advanced primary care and management of chronic lifestyle
-                  diseases.
-                </p>
-                <a
-                  href="#"
-                  className="text-primary font-bold text-sm flex items-center gap-2 hover:gap-4 transition-all"
-                >
-                  Learn More{' '}
-                  <span className="material-symbols-outlined text-lg">
-                    arrow_forward
-                  </span>
-                </a>
-              </div>
-              {/* Pediatrics */}
-              <div className="bg-white p-8 rounded-3xl hover:translate-y-[-8px] transition-transform shadow-sm">
-                <div className="text-primary mb-6">
-                  <span
-                    className="material-symbols-outlined text-4xl"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                  >
-                    child_care
-                  </span>
-                </div>
-                <h4 className="font-headline font-bold text-xl mb-3">
-                  Pediatrics
-                </h4>
-                <p className="text-slate-600 text-sm mb-6 leading-relaxed">
-                  Dedicated infant, child and adolescent care with a gentle
-                  touch.
-                </p>
-                <a
-                  href="#"
-                  className="text-primary font-bold text-sm flex items-center gap-2 hover:gap-4 transition-all"
-                >
-                  Learn More{' '}
-                  <span className="material-symbols-outlined text-lg">
-                    arrow_forward
-                  </span>
-                </a>
-              </div>
-              {/* Gynecology */}
-              <div className="bg-white p-8 rounded-3xl hover:translate-y-[-8px] transition-transform shadow-sm">
-                <div className="text-primary mb-6">
-                  <span
-                    className="material-symbols-outlined text-4xl"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                  >
-                    female
-                  </span>
-                </div>
-                <h4 className="font-headline font-bold text-xl mb-3">
-                  Gynecology
-                </h4>
-                <p className="text-slate-600 text-sm mb-6 leading-relaxed">
-                  Holistic women's healthcare from maternity to specialized
-                  surgical needs.
-                </p>
-                <a
-                  href="#"
-                  className="text-primary font-bold text-sm flex items-center gap-2 hover:gap-4 transition-all"
-                >
-                  Learn More{' '}
-                  <span className="material-symbols-outlined text-lg">
-                    arrow_forward
-                  </span>
-                </a>
-              </div>
-              {/* Orthopedics */}
-              <div className="bg-white p-8 rounded-3xl hover:translate-y-[-8px] transition-transform shadow-sm">
-                <div className="text-primary mb-6">
-                  <span
-                    className="material-symbols-outlined text-4xl"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                  >
-                    orthopedics
-                  </span>
-                </div>
-                <h4 className="font-headline font-bold text-xl mb-3">
-                  Orthopedics
-                </h4>
-                <p className="text-slate-600 text-sm mb-6 leading-relaxed">
-                  Expert care for bones, joints, and sports-related
-                  musculoskeletal injuries.
-                </p>
-                <a
-                  href="#"
-                  className="text-primary font-bold text-sm flex items-center gap-2 hover:gap-4 transition-all"
-                >
-                  Learn More{' '}
-                  <span className="material-symbols-outlined text-lg">
-                    arrow_forward
-                  </span>
-                </a>
-              </div>
+              {departments.length === 0 ? (
+                <>
+                  {/* Fallback to Medicine if none found (optional) */}
+                  <div className="col-span-full py-20 text-center text-slate-400 font-bold italic border-2 border-dashed border-slate-100 rounded-[2rem]">
+                    No departments added yet. Please check Admin Dashboard.
+                  </div>
+                </>
+              ) : (
+                departments.map(dept => (
+                  <div key={dept.id} className="bg-white p-8 rounded-3xl hover:translate-y-[-8px] transition-transform shadow-sm">
+                    <div className="text-primary mb-6">
+                      <span
+                        className="material-symbols-outlined text-4xl"
+                        style={{ fontVariationSettings: "'FILL' 1" }}
+                      >
+                        {dept.icon || 'medical_services'}
+                      </span>
+                    </div>
+                    <h4 className="font-headline font-bold text-xl mb-3">
+                      {dept.name}
+                    </h4>
+                    <p className="text-slate-600 text-sm mb-6 leading-relaxed">
+                      {dept.description}
+                    </p>
+                    <Link
+                      to={`/book-appointment?dept=${encodeURIComponent(dept.name)}`}
+                      className="text-primary font-bold text-sm flex items-center gap-2 hover:gap-4 transition-all"
+                    >
+                      Book Now{' '}
+                      <span className="material-symbols-outlined text-lg">
+                        arrow_forward
+                      </span>
+                    </Link>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </section>
@@ -320,8 +265,12 @@ const HomePage = () => {
                   <div key={doctor.id} className="group" data-testid={`doctor-card-${doctor.id}`}>
                     <div className="relative rounded-[2rem] overflow-hidden mb-6 aspect-[4/5] bg-slate-100 shadow-lg">
                       <img
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        src={doctor.photo_url}
+                        className="w-full h-full object-contain bg-slate-50 transition-transform duration-700 group-hover:scale-105"
+                        src={doctor.photo_url || 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=400&h=500&auto=format&fit=crop'}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=400&h=500&auto=format&fit=crop';
+                        }}
                         alt={doctor.name}
                       />
                       <div className="absolute bottom-4 left-4 right-4">
