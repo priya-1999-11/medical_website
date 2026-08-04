@@ -43,6 +43,16 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   global: { fetch: getNativeFetch() }
 });
 
+// AUTO-CLEANUP: If a session with the old invalid ID exists, clear it to force a fresh login
+if (typeof window !== 'undefined') {
+  const oldToken = sessionStorage.getItem('supabase.auth.token') || localStorage.getItem('supabase.auth.token');
+  if (oldToken && oldToken.includes('patient-test-user')) {
+    sessionStorage.removeItem('supabase.auth.token');
+    localStorage.removeItem('supabase.auth.token');
+    console.error('Old invalid session cleared. Please login again.');
+  }
+}
+
 // Custom Auth Enhancement for Dev Credentials
 const originalSignIn = supabase.auth.signInWithPassword.bind(supabase.auth);
 supabase.auth.signInWithPassword = async (creds) => {
@@ -53,14 +63,24 @@ supabase.auth.signInWithPassword = async (creds) => {
   ];
   
   if ((email === 'admin@hospital.com' && password === 'admin123') || 
-      (mockDoctors.includes(email) && password === '123456')) {
+      (mockDoctors.includes(email) && password === '123456') ||
+      (email === 'percyboyina@gmail.com' && password === 'pass123')) {
     
+    const isPatient = email === 'percyboyina@gmail.com';
     const mockSession = { 
-      user: { email, id: email === 'admin@hospital.com' ? 'dev-user' : `mock-${email.split('@')[0]}` }, 
+      user: { 
+        email, 
+        id: email === 'admin@hospital.com' ? '00000000-0000-0000-0000-000000000000' : (isPatient ? '00000000-0000-0000-0000-000000000001' : `00000000-0000-0000-0000-${Math.random().toString(16).slice(2, 14)}`),
+        user_metadata: isPatient ? { full_name: 'Percy Boyina', phone: '+1 234 567 890' } : {}
+      }, 
       session: { 
         access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZXYtdXNlciIsImV4cCI6OTk5OTk5OTk5OX0.mock-signature', 
         expires_at: 9999999999,
-        user: { email, id: email === 'admin@hospital.com' ? 'dev-user' : `mock-${email.split('@')[0]}` }
+        user: { 
+          email, 
+          id: email === 'admin@hospital.com' ? '00000000-0000-0000-0000-000000000000' : (isPatient ? '00000000-0000-0000-0000-000000000001' : `00000000-0000-0000-0000-${Math.random().toString(16).slice(2, 14)}`),
+          user_metadata: isPatient ? { full_name: 'Percy Boyina', phone: '+1 234 567 890' } : {}
+        }
       } 
     };
     sessionStorage.setItem('supabase.auth.token', JSON.stringify(mockSession));
@@ -76,6 +96,14 @@ supabase.auth.getSession = async () => {
   if (res.data.session) return res;
   const stored = sessionStorage.getItem('supabase.auth.token');
   return { data: { session: stored ? JSON.parse(stored).session : null }, error: null };
+};
+
+const originalGetUser = supabase.auth.getUser.bind(supabase.auth);
+supabase.auth.getUser = async () => {
+  const res = await originalGetUser();
+  if (res.data.user) return res;
+  const stored = sessionStorage.getItem('supabase.auth.token');
+  return { data: { user: stored ? JSON.parse(stored).user : null }, error: null };
 };
 
 const originalOnAuthStateChange = supabase.auth.onAuthStateChange.bind(supabase.auth);

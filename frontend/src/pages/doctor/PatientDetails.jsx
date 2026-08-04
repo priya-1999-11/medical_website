@@ -50,20 +50,30 @@ const PatientDetails = () => {
         .order('appointment_date', { ascending: false });
       setHistory(historyData || []);
 
-      const { data: prescriptionData } = await supabase
+      const { data: prescriptionData, error: prescriptionError } = await supabase
         .from('prescriptions')
         .select('*')
         .eq('patient_phone', aptData.patient_phone)
         .eq('doctor_id', doctorId)
         .order('created_at', { ascending: false });
+      
+      if (prescriptionError) {
+        console.error('Error fetching prescriptions:', prescriptionError);
+        alert('Could not load past prescriptions. This may be due to security (RLS) policies.');
+      }
       setPrescriptions(prescriptionData || []);
 
-      const { data: reportData } = await supabase
+      const { data: reportData, error: reportError } = await supabase
         .from('reports')
         .select('*')
         .eq('patient_phone', aptData.patient_phone)
         .eq('doctor_id', doctorId)
         .order('created_at', { ascending: false });
+      
+      if (reportError) {
+        console.error('Error fetching reports:', reportError);
+        alert('Could not load lab reports.');
+      }
       setReports(reportData || []);
 
     } catch (error) {

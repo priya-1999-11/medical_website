@@ -1,6 +1,15 @@
 import React from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { MdDashboard, MdLocalHospital, MdPeople, MdEvent, MdLogout } from 'react-icons/md';
+import { 
+  MdDashboard, 
+  MdLocalHospital, 
+  MdPeople, 
+  MdEvent, 
+  MdLogout,
+  MdShield,
+  MdMedicalServices,
+  MdSettings
+} from 'react-icons/md';
 import { supabase } from '@/lib/supabaseClient';
 
 const AdminLayout = () => {
@@ -19,23 +28,27 @@ const AdminLayout = () => {
 
   const navLinks = [
     { name: 'Dashboard', path: '/admin', icon: <MdDashboard size={20} />, exact: true },
+    { name: 'Hospitals', path: '/admin/hospitals', icon: <MdLocalHospital size={20} /> },
     { name: 'Doctors', path: '/admin/doctors', icon: <MdPeople size={20} /> },
-    { name: 'Departments', path: '/admin/departments', icon: <MdLocalHospital size={20} /> },
+    { name: 'Insurance', path: '/admin/insurance', icon: <MdShield size={20} /> },
+    { name: 'Diagnostic Packages', path: '/admin/packages', icon: <MdMedicalServices size={20} /> },
     { name: 'Appointments', path: '/admin/appointments', icon: <MdEvent size={20} /> },
+    { name: 'Patients', path: '/admin/patients', icon: <MdPeople size={20} /> },
+    { name: 'Settings', path: '/admin/settings', icon: <MdSettings size={20} /> },
   ];
 
   return (
     <div className="min-h-screen bg-slate-50 flex">
       {/* Sidebar */}
       <aside className="w-64 bg-slate-900 text-white flex flex-col hidden md:flex fixed h-full shadow-2xl z-20">
-        <div className="p-6">
+        <div className="p-6 border-b border-slate-800">
           <h2 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
             <span className="material-symbols-outlined text-blue-400">medical_services</span>
             Admin Panel
           </h2>
         </div>
         
-        <nav className="flex-1 px-4 py-6 space-y-2">
+        <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto custom-scrollbar">
           {navLinks.map((link) => (
             <NavLink
               key={link.name}

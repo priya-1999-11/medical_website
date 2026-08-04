@@ -1,31 +1,59 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { MdPeople, MdEvent, MdLocalHospital } from 'react-icons/md';
+import { 
+  MdPeople, 
+  MdEvent, 
+  MdLocalHospital, 
+  MdShield, 
+  MdMedicalServices, 
+  MdFormatListBulleted,
+  MdHistory,
+  MdFlashOn
+} from 'react-icons/md';
+import { hospitalService } from '@/lib/hospitalService';
+import { packageService } from '@/lib/packageService';
+import { insuranceService } from '@/lib/insuranceService';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
+    hospitals: 0,
     doctors: 0,
-    departments: 0,
-    appointments: 0
+    insurance: 0,
+    packages: 0,
+    appointments: 0,
+    patients: 0
   });
   const [loading, setLoading] = useState(true);
 
   const fetchStats = useCallback(async () => {
     setLoading(true);
     try {
-      const [docRes, deptRes, apptRes] = await Promise.all([
+      const [
+        docRes, 
+        apptRes, 
+        patientRes,
+        hospitalsData,
+        packagesData,
+        providersData
+      ] = await Promise.all([
         supabase.from('doctors').select('*', { count: 'exact', head: true }),
-        supabase.from('departments').select('*', { count: 'exact', head: true }),
-        supabase.from('appointments').select('*', { count: 'exact', head: true })
+        supabase.from('appointments').select('*', { count: 'exact', head: true }),
+        supabase.from('patients').select('*', { count: 'exact', head: true }),
+        hospitalService.getHospitals(),
+        packageService.getPackages(),
+        insuranceService.getProviders()
       ]);
 
       setStats({
+        hospitals: hospitalsData ? hospitalsData.length : 0,
         doctors: docRes?.count || 0,
-        departments: deptRes?.count || 0,
-        appointments: apptRes?.count || 0
+        insurance: providersData ? providersData.length : 0,
+        packages: packagesData ? packagesData.length : 0,
+        appointments: apptRes?.count || 0,
+        patients: patientRes?.count || 0
       });
     } catch (error) {
-      console.error('Error fetching stats:', error);
+      console.error('Error fetching dashboard stats:', error);
     } finally {
       setLoading(false);
     }
@@ -35,52 +63,76 @@ const AdminDashboard = () => {
     fetchStats();
   }, [fetchStats]);
 
+  const metricCards = [
+    { title: 'Total Hospitals', count: stats.hospitals, icon: <MdLocalHospital size={26} />, color: 'bg-blue-50 text-blue-600' },
+    { title: 'Total Doctors', count: stats.doctors, icon: <MdPeople size={26} />, color: 'bg-emerald-50 text-emerald-600' },
+    { title: 'Insurance Providers', count: stats.insurance, icon: <MdShield size={26} />, color: 'bg-blue-50 text-blue-600' },
+    { title: 'Diagnostic Packages', count: stats.packages, icon: <MdMedicalServices size={26} />, color: 'bg-emerald-50 text-emerald-600' },
+    { title: 'Total Appointments', count: stats.appointments, icon: <MdEvent size={26} />, color: 'bg-blue-50 text-blue-600' },
+    { title: 'Total Patients', count: stats.patients, icon: <MdPeople size={26} />, color: 'bg-emerald-50 text-emerald-600' },
+  ];
+
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-slate-900 mb-6">Dashboard Overview</h2>
+    <div className="space-y-8 animate-fade-in-up">
+      <div>
+        <h2 className="text-2xl font-black text-slate-900 tracking-tight mb-1">Dashboard Overview</h2>
+        <p className="text-xs text-slate-500 font-medium">Real-time statistics connected directly to the Clinical Serenity Supabase database.</p>
+      </div>
 
       {loading ? (
-        <div className="flex justify-center py-10">
+        <div className="flex justify-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
-            <div className="w-14 h-14 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-              <MdPeople size={28} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {metricCards.map((card) => (
+            <div key={card.title} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
+              <div className="space-y-1">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{card.title}</p>
+                <p className="text-3xl font-black text-slate-900">{card.count}</p>
+              </div>
+              <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${card.color}`}>
+                {card.icon}
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">Total Doctors</p>
-              <p className="text-3xl font-black text-slate-900">{stats.doctors}</p>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
-            <div className="w-14 h-14 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-              <MdLocalHospital size={28} />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">Departments</p>
-              <p className="text-3xl font-black text-slate-900">{stats.departments}</p>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
-            <div className="w-14 h-14 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
-              <MdEvent size={28} />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">Appointments</p>
-              <p className="text-3xl font-black text-slate-900">{stats.appointments}</p>
-            </div>
-          </div>
+          ))}
         </div>
       )}
 
-      {/* Placeholder for recent activity tables */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-        <h3 className="font-bold text-lg text-slate-900 mb-4">Quick Actions</h3>
-        <p className="text-slate-600 text-sm">Use the sidebar to navigate to the specific management modules for Doctors, Departments, and Appointments.</p>
+      {/* Placeholder Widgets Row */}
+      <div className="grid lg:grid-cols-12 gap-6">
+        
+        {/* Quick Actions Placeholder Widget */}
+        <div className="lg:col-span-5 bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-4">
+          <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+            <MdFlashOn className="text-blue-600 text-xl" />
+            <h3 className="font-bold text-base text-slate-900">Quick Actions</h3>
+          </div>
+          <div className="space-y-2 text-xs font-medium text-slate-600">
+            <p className="p-3 bg-slate-50 rounded-xl border border-slate-100">⚡ Fast-track Hospital & Doctor registration</p>
+            <p className="p-3 bg-slate-50 rounded-xl border border-slate-100">⚡ Manage Cashless Insurance Provider policies</p>
+            <p className="p-3 bg-slate-50 rounded-xl border border-slate-100">⚡ Update Diagnostic Checkup Packages</p>
+          </div>
+        </div>
+
+        {/* Recent Activity Placeholder Widget */}
+        <div className="lg:col-span-7 bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-4">
+          <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+            <MdHistory className="text-emerald-600 text-xl" />
+            <h3 className="font-bold text-base text-slate-900">Recent Platform Activity</h3>
+          </div>
+          <div className="space-y-2 text-xs text-slate-500">
+            <div className="p-3 bg-slate-50/80 rounded-xl flex items-center justify-between">
+              <span>Database query executed successfully</span>
+              <span className="font-mono text-[10px] bg-white px-2 py-0.5 rounded border">Just now</span>
+            </div>
+            <div className="p-3 bg-slate-50/80 rounded-xl flex items-center justify-between">
+              <span>Appointments sync verified</span>
+              <span className="font-mono text-[10px] bg-white px-2 py-0.5 rounded border">2 mins ago</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );

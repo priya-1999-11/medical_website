@@ -1,26 +1,75 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
+import DoctorCard from '../components/DoctorCard';
 import { supabase } from '@/lib/supabaseClient';
+import { 
+  Search, 
+  Filter, 
+  RefreshCw, 
+  UserX, 
+  Stethoscope, 
+  PhoneCall, 
+  Check, 
+  Star,
+  Building2,
+  Calendar,
+  MapPin
+} from 'lucide-react';
+
 const DoctorDirectory = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialDept = searchParams.get('department') || '';
+  const initialSearch = searchParams.get('search') || '';
+
   const [doctors, setDoctors] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const [filters, setFilters] = useState({
-    search: '',
-    department: '',
-    availability: 'All Availability'
+    search: initialSearch,
+    department: initialDept,
+    availability: 'All Availability',
+    consultationType: 'In-clinic',
+    minRating: 0
   });
 
-  const AVAILABILITY_OPTIONS = [
-    'All Availability', 'Available Today', 'Monday - Friday', 
-    'Saturday', 'Sunday'
-  ];
+  const updateURLParams = useCallback((newFilters) => {
+    const params = {};
+    if (newFilters.department) params.department = newFilters.department;
+    if (newFilters.search) params.search = newFilters.search;
+    if (newFilters.availability && newFilters.availability !== 'All Availability') {
+      params.availability = newFilters.availability;
+    }
+    setSearchParams(params, { replace: true });
+  }, [setSearchParams]);
+
+  useEffect(() => {
+    const deptFromURL = searchParams.get('department') || '';
+    const searchFromURL = searchParams.get('search') || '';
+    const availFromURL = searchParams.get('availability') || 'All Availability';
+
+    setFilters(prev => {
+      if (
+        prev.department !== deptFromURL ||
+        prev.search !== searchFromURL ||
+        prev.availability !== availFromURL
+      ) {
+        return {
+          ...prev,
+          department: deptFromURL,
+          search: searchFromURL,
+          availability: availFromURL
+        };
+      }
+      return prev;
+    });
+  }, [searchParams]);
 
   const fetchDepartments = useCallback(async () => {
     try {
-      const { data, error } = await supabase.from('departments').select('*');
+      const { data, error } = await supabase.from('departments').select('*').order('name');
       if (error) throw error;
       setDepartments(data || []);
     } catch (error) {
@@ -38,8 +87,7 @@ const DoctorDirectory = () => {
       
       let filteredData = data || [];
 
-      // Apply Local Filtering for better UX and consistency
-      if (filters.department && filters.department !== 'All Departments') {
+      if (filters.department && filters.department !== 'All Specialties') {
         filteredData = filteredData.filter(doc => 
           doc.department?.trim().toLowerCase() === filters.department?.trim().toLowerCase()
         );
@@ -48,16 +96,11 @@ const DoctorDirectory = () => {
       if (filters.availability !== 'All Availability') {
         if (filters.availability === 'Available Today') {
           filteredData = filteredData.filter(doc => doc.available_today === true);
-        } else if (filters.availability === 'Monday - Friday') {
-          filteredData = filteredData.filter(doc => 
-            (doc.schedule || '').toLowerCase().includes('mon') && 
-            (doc.schedule || '').toLowerCase().includes('fri')
-          );
-        } else if (filters.availability === 'Saturday') {
-          filteredData = filteredData.filter(doc => (doc.schedule || '').toLowerCase().includes('sat'));
-        } else if (filters.availability === 'Sunday') {
-          filteredData = filteredData.filter(doc => (doc.schedule || '').toLowerCase().includes('sun'));
         }
+      }
+
+      if (filters.minRating > 0) {
+        filteredData = filteredData.filter(doc => (doc.rating || 5.0) >= filters.minRating);
       }
 
       if (filters.search) {
@@ -79,208 +122,285 @@ const DoctorDirectory = () => {
 
   useEffect(() => {
     fetchDepartments();
-    fetchDoctors();
-  }, [fetchDepartments, fetchDoctors]);
+  }, [fetchDepartments]);
 
   useEffect(() => {
     fetchDoctors();
-  }, [filters, fetchDoctors]);
+  }, [fetchDoctors]);
 
   const handleSearchChange = (e) => {
-    setFilters({ ...filters, search: e.target.value });
+    const val = e.target.value;
+    const updated = { ...filters, search: val };
+    setFilters(updated);
+    updateURLParams(updated);
   };
 
-  const handleDepartmentChange = (e) => {
-    setFilters({ ...filters, department: e.target.value });
+  const handleDepartmentChange = (deptName) => {
+    const updated = { ...filters, department: deptName };
+    setFilters(updated);
+    updateURLParams(updated);
   };
 
-  const handleAvailabilityChange = (e) => {
-    setFilters({ ...filters, availability: e.target.value });
+  const handleClearFilters = () => {
+    const cleared = { search: '', department: '', availability: 'All Availability', consultationType: 'In-clinic', minRating: 0 };
+    setFilters(cleared);
+    updateURLParams(cleared);
   };
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-slate-50">
       <NavBar />
 
-      <main className="pt-32 pb-20 px-8 max-w-7xl mx-auto">
-        {/* Hero & Search Section */}
-        <header className="mb-16">
-          <h1 className="text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
-            Find Your Specialist
-          </h1>
-          <p className="text-slate-600 text-lg max-w-2xl">
-            Expert medical care tailored to your needs. Browse our directory of
-            world-class clinicians and schedule your visit today.
-          </p>
+      <main className="pt-28 md:pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto space-y-8">
+        
+        {/* Top Header Hero Title & Floating AI Care Manager Box */}
+        <header className="bg-white rounded-[2.5rem] p-8 md:p-12 border border-slate-200/80 shadow-sm relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div className="max-w-2xl space-y-3 text-center lg:text-left">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-extrabold tracking-wider border border-blue-100 uppercase">
+              <Stethoscope className="w-3.5 h-3.5" />
+              VERIFIED CLINICAL DIRECTORY
+            </span>
+
+            <h1 className="font-headline text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+              Find the Right Doctor <br />
+              <span className="bg-gradient-to-r from-blue-700 to-blue-500 text-transparent bg-clip-text italic">For Your Health</span>
+            </h1>
+
+            <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium">
+              Connect with experienced and trusted specialists who provide the best clinical care.
+            </p>
+          </div>
+
+          {/* Floating Care Manager Box (Matching Reference Image) */}
+          <div className="bg-gradient-to-br from-blue-50 to-emerald-50/50 p-6 rounded-3xl border border-blue-100/80 shadow-sm flex items-center gap-4 shrink-0 max-w-sm">
+            <div className="w-12 h-12 rounded-2xl bg-blue-900 text-white flex items-center justify-center font-bold text-xl shrink-0 shadow-md">
+              <PhoneCall className="w-6 h-6" />
+            </div>
+            <div className="space-y-1">
+              <div className="text-xs font-black text-blue-900">Serenity Care Manager</div>
+              <div className="text-[11px] text-slate-500 font-medium">Need help finding the right doctor?</div>
+              <button 
+                type="button" 
+                onClick={() => alert('Care Manager Helpline: Call +1 (800) SERENITY for instant specialist matching.')}
+                className="px-3.5 py-1.5 bg-blue-700 hover:bg-blue-800 text-white font-bold text-[11px] rounded-xl transition-all shadow-sm active:scale-95"
+              >
+                Talk to Expert
+              </button>
+            </div>
+          </div>
         </header>
 
-        {/* Search/Filter Bar */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-12">
-          {/* Main Search */}
-          <div className="lg:col-span-6 bg-white p-2 rounded-full shadow-sm flex items-center border border-slate-200">
-            <div className="pl-4 pr-2 text-slate-600">
-              <span className="material-symbols-outlined">search</span>
+        {/* Global Search & Filter Bar Widget (Matching Reference) */}
+        <section className="bg-white rounded-3xl p-4 md:p-6 shadow-sm border border-slate-200/80">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+            
+            {/* Search Input */}
+            <div className="md:col-span-4 bg-slate-50 rounded-2xl flex items-center px-4 border border-slate-200/80 focus-within:border-blue-600 focus-within:bg-white transition-all">
+              <Search className="w-4 h-4 text-slate-400 shrink-0 mr-2.5" />
+              <input
+                className="w-full bg-transparent border-none focus:ring-0 text-slate-900 placeholder:text-slate-400 py-3 text-xs font-semibold focus:outline-none"
+                placeholder="Search doctor, specialty or hospital..."
+                type="text"
+                value={filters.search}
+                onChange={handleSearchChange}
+                data-testid="doctor-search-input"
+              />
             </div>
-            <input
-              className="w-full bg-transparent border-none focus:ring-0 text-slate-900 placeholder:text-slate-400 py-3"
-              placeholder="Search by doctor name or specialty..."
-              type="text"
-              value={filters.search}
-              onChange={handleSearchChange}
-              data-testid="doctor-search-input"
-            />
-          </div>
 
-          {/* Department Filter */}
-          <div className="lg:col-span-3 bg-white px-4 rounded-full flex items-center border border-slate-200 shadow-sm hover:border-primary/30 transition-all">
-            <span className="material-symbols-outlined text-slate-600 mr-3">
-              medication
-            </span>
-            <select
-              className="w-full bg-transparent border-none focus:ring-0 text-slate-900 py-3 text-sm font-medium cursor-pointer"
-              value={filters.department}
-              onChange={handleDepartmentChange}
-              data-testid="department-filter-select"
-            >
-              <option value="">All Departments</option>
-              {departments.map((dept) => (
-                <option key={dept.id} value={dept.name}>
-                  {dept.name}
-                </option>
-              ))}
-            </select>
-          </div>
+            {/* Specialty Select */}
+            <div className="md:col-span-3 bg-slate-50 rounded-2xl flex items-center px-3 border border-slate-200/80">
+              <select
+                className="w-full bg-transparent border-none focus:ring-0 text-slate-900 py-3 text-xs font-bold cursor-pointer focus:outline-none"
+                value={filters.department}
+                onChange={(e) => handleDepartmentChange(e.target.value)}
+                data-testid="department-filter-select"
+              >
+                <option value="">All Specialties</option>
+                {departments.map((dept) => (
+                  <option key={dept.id} value={dept.name}>
+                    {dept.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* Availability Filter */}
-          <div className="lg:col-span-3 bg-white px-4 rounded-full flex items-center border border-slate-200 shadow-sm hover:border-primary/30 transition-all">
-            <span className="material-symbols-outlined text-slate-600 mr-3">
-              calendar_month
-            </span>
-            <select
-              className="w-full bg-transparent border-none focus:ring-0 text-slate-900 py-3 text-sm font-medium cursor-pointer"
-              value={filters.availability}
-              onChange={handleAvailabilityChange}
-              data-testid="availability-filter-select"
-            >
-              {AVAILABILITY_OPTIONS.map(opt => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
+            {/* Experience Select */}
+            <div className="md:col-span-2 bg-slate-50 rounded-2xl flex items-center px-3 border border-slate-200/80">
+              <select className="w-full bg-transparent border-none focus:ring-0 text-slate-900 py-3 text-xs font-bold cursor-pointer focus:outline-none">
+                <option>Any Experience</option>
+                <option>10+ Years</option>
+                <option>15+ Years</option>
+              </select>
+            </div>
+
+            {/* Action Buttons: Search & Reset */}
+            <div className="md:col-span-3 flex items-center gap-2">
+              <button
+                type="button"
+                onClick={fetchDoctors}
+                className="flex-1 bg-blue-900 hover:bg-blue-800 text-white font-extrabold py-3 px-4 rounded-2xl text-xs transition-all shadow-sm flex items-center justify-center gap-2"
+              >
+                <Search className="w-4 h-4" />
+                <span>Search</span>
+              </button>
+
+              {(filters.department || filters.search || filters.availability !== 'All Availability') && (
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  className="px-3 py-3 text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors"
+                >
+                  Reset
+                </button>
+              )}
+            </div>
+
           </div>
         </section>
 
-        {/* Results Count */}
-        <div className="mb-6 text-slate-600">
-          Found <span className="font-bold text-slate-900">{doctors.length}</span>{' '}
-          {doctors.length === 1 ? 'doctor' : 'doctors'}
-        </div>
+        {/* Main 2-Column Section: Left Filter Sidebar + Right Doctor Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Left Filter Sidebar */}
+          <aside className="lg:col-span-3 bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="font-headline font-bold text-sm text-slate-900 flex items-center gap-2">
+                <Filter className="w-4 h-4 text-blue-600" /> Filter By
+              </h3>
+              <button onClick={handleClearFilters} className="text-[11px] font-bold text-blue-700 hover:underline">
+                Clear All
+              </button>
+            </div>
 
-        {/* Results Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8" data-testid="doctors-grid">
-          {loading ? (
-            <div className="col-span-3 text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-              <p className="mt-4 text-slate-600">Loading doctors...</p>
-            </div>
-          ) : doctors.length === 0 ? (
-            <div className="col-span-3 text-center py-12">
-              <span className="material-symbols-outlined text-6xl text-slate-300 mb-4">
-                search_off
-              </span>
-              <p className="text-slate-600">No doctors found matching your criteria.</p>
-            </div>
-          ) : (
-            doctors.map((doctor) => (
-              <div
-                key={doctor.id}
-                className="group bg-white rounded-xl overflow-hidden hover:shadow-[0_20px_40px_rgba(25,28,29,0.06)] transition-all duration-300 border border-slate-100"
-                data-testid={`doctor-card-${doctor.id}`}
-              >
-                <div className="relative h-64 overflow-hidden">
-                  <img
-                    className="w-full h-full object-contain bg-slate-50 group-hover:scale-105 transition-transform duration-500"
-                    src={doctor.photo_url || 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=400&h=300&auto=format&fit=crop'}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=400&h=300&auto=format&fit=crop';
-                    }}
-                    alt={doctor.name}
+            {/* Specialty Checkboxes */}
+            <div className="space-y-2">
+              <label className="text-xs font-extrabold text-slate-900 uppercase tracking-wider block mb-2">Specialty</label>
+              <div className="space-y-1.5 text-xs text-slate-600">
+                <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-900">
+                  <input 
+                    type="radio" 
+                    name="deptFilter"
+                    checked={!filters.department} 
+                    onChange={() => handleDepartmentChange('')}
+                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" 
                   />
-                  {doctor.available_today ? (
-                    <div className="absolute top-4 right-4 bg-blue-100/90 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
-                      <span className="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
-                      <span className="text-[10px] font-bold text-primary tracking-wider uppercase">
-                        Available Today
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="absolute top-4 right-4 bg-slate-100/90 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
-                      <span className="text-[10px] font-bold text-slate-600 tracking-wider uppercase">
-                        Next: Tomorrow
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className="p-8">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h3 className="text-2xl font-bold text-slate-900 leading-tight">
-                        {doctor.name}
-                      </h3>
-                      <p className="text-primary font-semibold text-sm tracking-wide font-headline">
-                        {doctor.title}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="space-y-4 mb-8">
-                    <div className="flex items-center gap-3 text-slate-600">
-                      <span className="material-symbols-outlined text-lg">
-                        language
-                      </span>
-                      <span className="text-sm">{doctor.languages?.join(', ') || 'English, Hindi'}</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-slate-600">
-                      <span className="material-symbols-outlined text-lg">
-                        schedule
-                      </span>
-                      <span className="text-sm">{doctor.schedule}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="flex gap-1 text-yellow-500">
-                        {[...Array(5)].map((_, i) => (
-                          <span
-                            key={i}
-                            className="material-symbols-outlined text-sm"
-                            style={{
-                              fontVariationSettings:
-                                i < Math.floor(doctor.rating || 5) ? "'FILL' 1" : "'FILL' 0"
-                            }}
-                          >
-                            star
-                          </span>
-                        ))}
-                      </div>
-                      <span className="text-xs font-bold text-slate-600">
-                        {doctor.rating || '5.0'} ({doctor.review_count || '120'} reviews)
-                      </span>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <button className="py-3 px-4 rounded-lg border border-slate-300 text-slate-700 font-bold text-sm hover:bg-slate-50 transition-colors">
-                      View Profile
-                    </button>
-                    <Link
-                      to={`/book-appointment/${doctor.id}`}
-                      className="py-3 px-4 rounded-lg bg-primary text-white font-bold text-sm hover:bg-blue-700 shadow-md shadow-primary/10 transition-all text-center"
-                      data-testid={`book-now-btn-${doctor.id}`}
-                    >
-                      Book Now
-                    </Link>
-                  </div>
-                </div>
+                  <span>All Specialties</span>
+                </label>
+
+                {departments.map((dept) => (
+                  <label key={dept.id} className="flex items-center gap-2 cursor-pointer hover:text-slate-900 font-medium">
+                    <input 
+                      type="radio" 
+                      name="deptFilter"
+                      checked={filters.department?.toLowerCase() === dept.name?.toLowerCase()} 
+                      onChange={() => handleDepartmentChange(dept.name)}
+                      className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" 
+                    />
+                    <span>{dept.name}</span>
+                  </label>
+                ))}
               </div>
-            ))
-          )}
+            </div>
+
+            {/* Availability Filter */}
+            <div className="space-y-2 pt-4 border-t border-slate-100">
+              <label className="text-xs font-extrabold text-slate-900 uppercase tracking-wider block mb-2">Availability</label>
+              <div className="space-y-1.5 text-xs text-slate-600">
+                <label className="flex items-center gap-2 cursor-pointer font-medium">
+                  <input 
+                    type="checkbox" 
+                    checked={filters.availability === 'Available Today'}
+                    onChange={(e) => setFilters({...filters, availability: e.target.checked ? 'Available Today' : 'All Availability'})}
+                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" 
+                  />
+                  <span>Available Today</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Rating Filter */}
+            <div className="space-y-2 pt-4 border-t border-slate-100">
+              <label className="text-xs font-extrabold text-slate-900 uppercase tracking-wider block mb-2">Patient Rating</label>
+              <div className="flex flex-wrap gap-1.5">
+                {[0, 4.0, 4.5, 4.8].map((rating) => (
+                  <button
+                    key={rating}
+                    type="button"
+                    onClick={() => setFilters({ ...filters, minRating: rating })}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+                      filters.minRating === rating
+                        ? 'bg-blue-900 text-white border-blue-900'
+                        : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    {rating === 0 ? 'All' : `${rating}+ ★`}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Green Care Expert Banner Card */}
+            <div className="p-5 bg-gradient-to-br from-blue-700 to-blue-900 rounded-2xl text-white space-y-3">
+              <h4 className="font-bold text-xs uppercase tracking-wider">Can't find the right doctor?</h4>
+              <p className="text-[11px] opacity-90 leading-relaxed">Our care experts are here to help you 24/7.</p>
+              <button 
+                type="button"
+                onClick={() => alert('helpline: +1 (800) SERENITY')}
+                className="w-full py-2.5 bg-white text-blue-800 font-extrabold rounded-xl text-xs hover:bg-blue-50 transition-colors shadow-sm"
+              >
+                Talk to Care Expert
+              </button>
+            </div>
+          </aside>
+
+          {/* Right Main Doctors List */}
+          <main className="lg:col-span-9 space-y-6">
+            
+            {/* Results Top Header */}
+            <div className="flex items-center justify-between px-2">
+              <div className="text-sm font-semibold text-slate-600">
+                <span className="font-black text-slate-900 text-base">{doctors.length}</span> doctors found
+                {filters.department && (
+                  <span> in <span className="text-blue-700 font-bold">{filters.department}</span></span>
+                )}
+              </div>
+
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
+                <span>Sort By:</span>
+                <select className="bg-white border border-slate-200 rounded-xl px-3 py-1.5 font-bold text-slate-900 outline-none cursor-pointer">
+                  <option>Most Relevant</option>
+                  <option>Highest Rated</option>
+                  <option>Experience: High to Low</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Doctors Cards Container */}
+            <div className="space-y-4" data-testid="doctors-grid">
+              {loading ? (
+                [...Array(4)].map((_, i) => (
+                  <div key={i} className="bg-white rounded-3xl p-6 border border-slate-200 space-y-4 animate-pulse">
+                    <div className="h-24 bg-slate-100 rounded-xl w-full" />
+                  </div>
+                ))
+              ) : doctors.length === 0 ? (
+                <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 space-y-4">
+                  <UserX className="w-12 h-12 text-slate-300 mx-auto" />
+                  <h3 className="font-bold text-lg text-slate-900">No Doctors Found</h3>
+                  <p className="text-xs text-slate-500 max-w-sm mx-auto">Try adjusting your search query or selecting a different specialty.</p>
+                  <button onClick={handleClearFilters} className="px-6 py-2.5 bg-blue-900 text-white font-bold rounded-xl text-xs">
+                    Clear Filters
+                  </button>
+                </div>
+              ) : (
+                doctors.map((doctor) => (
+                  <DoctorCard key={doctor.id} doctor={doctor} />
+                ))
+              )}
+            </div>
+
+          </main>
+
         </div>
       </main>
 

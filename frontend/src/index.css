@@ -2,8 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap');
+@layer utilities {
+  @keyframes bounce-subtle {
+    0%, 100% {
+      transform: translateY(-2%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: translateY(0);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+  .animate-bounce-subtle {
+    animation: bounce-subtle 3s infinite;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+  }
+
+  .glass-card-dark {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(39, 91, 153, 0.15);
+  }
+
+  .gradient-text-blue {
+    background: linear-gradient(135deg, #163861 0%, #275B99 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gradient-text-emerald {
+    background: linear-gradient(135deg, #3F8222 0%, #4D9B2A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #d9e6f5;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #275b99;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
 
 * {
   margin: 0;
@@ -15,7 +76,8 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
+  color: #1e293b;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -24,11 +86,12 @@ h1, h2, h3, h4, h5, h6 {
 
 @layer base {
   :root {
-    --primary: #00478d;
-    --primary-container: #005eb8;
+    --primary: #275B99;
+    --primary-container: #F0F5FA;
     --on-primary: #ffffff;
-    --secondary: #4d6073;
-    --surface: #f8f9fa;
-    --error: #ba1a1a;
+    --secondary: #4D9B2A;
+    --surface: #ffffff;
+    --error: #275B99;
+    --radius: 1rem;
   }
 }

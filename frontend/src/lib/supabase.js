@@ -31,10 +31,33 @@ const IS_MOCKED = !supabaseUrl || !supabaseAnonKey || supabaseUrl.includes('your
 const devAuthFallback = ({ email, password }) => {
   if (email === 'admin@hospital.com' && password === 'admin123') {
     const mockSession = { 
-      user: { email, id: 'dev-user' }, 
+      user: { email, id: '00000000-0000-0000-0000-000000000000' }, 
       session: { 
         access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZXYtdXNlciIsImV4cCI6OTk5OTk5OTk5OX0.mock-signature', 
-        expires_at: 9999999999 
+        expires_at: 9999999999,
+        user: { email, id: '00000000-0000-0000-0000-000000000000' }
+      } 
+    };
+    localStorage.setItem('supabase.auth.token', JSON.stringify(mockSession));
+    return Promise.resolve({ data: mockSession, error: null });
+  }
+
+  // Mock Patient User for testing
+  if (email === 'percyboyina@gmail.com' && password === 'pass123') {
+    const mockSession = { 
+      user: { 
+        email, 
+        id: '00000000-0000-0000-0000-000000000001',
+        user_metadata: { full_name: 'Percy Boyina', phone: '+1 234 567 890' } 
+      }, 
+      session: { 
+        access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwYXRpZW50LXRlc3QtdXNlciIsImV4cCI6OTk5OTk5OTk5OX0.mock-signature', 
+        expires_at: 9999999999,
+        user: { 
+          email, 
+          id: '00000000-0000-0000-0000-000000000001',
+          user_metadata: { full_name: 'Percy Boyina', phone: '+1 234 567 890' } 
+        }
       } 
     };
     localStorage.setItem('supabase.auth.token', JSON.stringify(mockSession));

@@ -1,8 +1,7 @@
 """
 Script to seed the database with sample data for Clinical Serenity
 """
-import asyncio
-from motor.motor_asyncio import AsyncIOMotorClient
+from supabase import create_client, Client
 from dotenv import load_dotenv
 import os
 from pathlib import Path
@@ -10,22 +9,13 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-mongo_url = os.environ['MONGO_URL']
-db_name = os.environ['DB_NAME']
+supabase_url = os.environ.get('SUPABASE_URL') or os.environ.get('REACT_APP_SUPABASE_URL', 'https://rdhoikphrxgyoyqdqzat.supabase.co')
+supabase_key = os.environ.get('SUPABASE_KEY') or os.environ.get('REACT_APP_SUPABASE_ANON_KEY', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkaG9pa3BocnhneW95cWRxemF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0MjExODksImV4cCI6MjA4OTk5NzE4OX0.VaKH0kUoQqg81Tpr_Zxpnaifi8zJndCpaVawRxQMBHU')
+
+supabase_client: Client = create_client(supabase_url, supabase_key)
 
 
-async def seed_database():
-    client = AsyncIOMotorClient(mongo_url)
-    db = client[db_name]
-    
-    # Clear existing data
-    print("Clearing existing data...")
-    await db.departments.delete_many({})
-    await db.doctors.delete_many({})
-    await db.appointments.delete_many({})
-    
-    # Seed Departments
-    print("Seeding departments...")
+def seed_database():
     departments = [
         {
             "id": "dept-1",
@@ -64,11 +54,14 @@ async def seed_database():
             "icon": "female"
         }
     ]
-    await db.departments.insert_many(departments)
-    print(f"✓ Seeded {len(departments)} departments")
+    try:
+        print("Seeding departments...")
+        supabase_client.table("departments").upsert(departments).execute()
+        print(f"✓ Seeded {len(departments)} departments")
+    except Exception as e:
+        print(f"Notice: Supabase seeding for departments skipped: {e}")
     
     # Seed Doctors
-    print("Seeding doctors...")
     doctors = [
         {
             "id": "doc-1",
@@ -215,16 +208,15 @@ async def seed_database():
             "about": "Elite sports medicine specialist treating professional athletes and weekend warriors alike."
         }
     ]
-    await db.doctors.insert_many(doctors)
-    print(f"✓ Seeded {len(doctors)} doctors")
+    try:
+        supabase_client.table("doctors").upsert(doctors).execute()
+        print(f"✓ Seeded {len(doctors)} doctors")
+    except Exception as e:
+        print(f"Notice: Supabase seeding for doctors skipped: {e}")
     
-    print("\n✅ Database seeding completed successfully!")
-    print(f"   - {len(departments)} departments")
-    print(f"   - {len(doctors)} doctors")
-    
-    client.close()
+    print("[OK] Database seed process finished.")
 
 
 if __name__ == "__main__":
     print("Starting database seed...")
-    asyncio.run(seed_database())
+    seed_database()
