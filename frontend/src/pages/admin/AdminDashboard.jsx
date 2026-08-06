@@ -76,7 +76,7 @@ const AdminDashboard = () => {
     <div className="space-y-8 animate-fade-in-up">
       <div>
         <h2 className="text-2xl font-black text-slate-900 tracking-tight mb-1">Dashboard Overview</h2>
-        <p className="text-xs text-slate-500 font-medium">Real-time statistics connected directly to the Clinical Serenity Supabase database.</p>
+        <p className="text-xs text-slate-500 font-medium">Real-time statistics connected directly to the Supabase database.</p>
       </div>
 
       {loading ? (

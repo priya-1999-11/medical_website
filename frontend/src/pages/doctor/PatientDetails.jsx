@@ -98,7 +98,7 @@ const PatientDetails = () => {
 
   const sendWhatsApp = (text) => {
     if (!appointment) return;
-    const message = `Hello ${appointment.patient_full_name},\n\nYour prescription from Dr. ${appointment.doctor_name}:\n\n${text}\n\nThank you for choosing Clinical Serenity.`;
+    const message = `Hello ${appointment.patient_full_name},\n\nYour prescription from Dr. ${appointment.doctor_name}:\n\n${text}\n\nThank you for choosing Prana Health Network.`;
     const url = `https://wa.me/${appointment.patient_phone.replace(/[^\d]/g, '')}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
   };

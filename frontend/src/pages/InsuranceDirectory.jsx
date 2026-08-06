@@ -71,12 +71,12 @@ const InsuranceDirectory = () => {
                 </div>
 
                 <h1 className="font-headline text-4xl md:text-6xl font-black tracking-tight leading-tight">
-                  Health Insurance <br />
-                  <span className="text-blue-400">& Cashless Claims</span>
+                  Stress-Free <br />
+                  <span className="text-blue-400">Coverage Coordination</span>
                 </h1>
 
                 <p className="text-slate-300 text-base md:text-lg font-medium leading-relaxed">
-                  Seamless cashless hospitalization, instant pre-authorization approvals, and digital claim tracking across 14,000+ empaneled healthcare providers.
+                  Focus on recovery while our dedicated desk coordinates pre-authorization and direct billing with your provider.
                 </p>
 
                 {/* CTAs */}
@@ -104,7 +104,7 @@ const InsuranceDirectory = () => {
                 <div className="flex items-center justify-between border-b border-slate-700 pb-4">
                   <div>
                     <span className="text-[10px] text-blue-400 font-black uppercase tracking-widest block">NETWORK VERIFIED</span>
-                    <h3 className="font-headline text-xl font-bold text-white">Cashless Hospital Desk</h3>
+                    <h3 className="font-headline text-xl font-bold text-white">Direct Billing Desk</h3>
                   </div>
                   <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-500/30 text-blue-400 flex items-center justify-center font-bold">
                     <Building2 className="w-5 h-5" />
@@ -119,12 +119,12 @@ const InsuranceDirectory = () => {
 
                   <div className="flex items-center gap-3 font-medium">
                     <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
-                    <span>Zero Co-Pay & Direct Hospital Settlement</span>
+                    <span>Clear Pre-Authorization & Direct Settlement</span>
                   </div>
 
                   <div className="flex items-center gap-3 font-medium">
                     <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
-                    <span>24/7 Dedicated Insurance Desk Support</span>
+                    <span>24/7 Dedicated Support Coordinators</span>
                   </div>
                 </div>
 
@@ -232,7 +232,7 @@ const InsuranceDirectory = () => {
                     Partner Insurance Companies
                   </h2>
                   <p className="text-xs text-slate-500 font-medium">
-                    Verified insurance partners integrated with Clinical Serenity hospital network for cashless treatment.
+                    Verified insurance partners integrated with our healthcare network for direct billing coordination.
                   </p>
                 </div>
               </div>

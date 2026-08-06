@@ -85,7 +85,7 @@ const PatientDashboard = () => {
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <span className="material-symbols-outlined text-primary text-3xl">local_hospital</span>
-            <span className="font-headline font-black text-xl text-slate-900 tracking-tight">Clinical Serenity</span>
+            <span className="font-headline font-black text-xl text-slate-900 tracking-tight">Prana Health Network</span>
           </Link>
           <div className="flex items-center gap-4">
             <span className="text-slate-500 font-bold text-sm hidden sm:inline">{user?.email}</span>

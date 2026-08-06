@@ -59,20 +59,20 @@ const About = () => {
   }, []);
 
   const timeline = [
-    { year: "1995", event: "Foundation of Clinical Serenity Main Campus" },
-    { year: "2005", event: "Ranked #1 for Patient Satisfaction in the State" },
-    { year: "2012", event: "Opening of the Advanced Cardiac Research Wing" },
-    { year: "2020", event: "Launch of Digital Health & Remote Monitoring" },
-    { year: "2024", event: "Expansion to 5 Regional Branches completed" }
+    { year: "1995", event: "Inauguration of our primary medical care center." },
+    { year: "2005", event: "Awarded top state honors for patient safety." },
+    { year: "2012", event: "Established our specialized cardiovascular institute." },
+    { year: "2020", event: "Pioneered integrated digital portals for care tracking." },
+    { year: "2024", event: "Completed integration of four regional health hubs." }
   ];
 
   const trustFeatures = [
-    { icon: Stethoscope, title: 'Experienced Doctors', desc: 'Board-certified specialists across 30+ disciplines.' },
-    { icon: Activity, title: 'Modern Technology', desc: 'AI-assisted imaging and robotic surgical suites.' },
-    { icon: HeartPulse, title: 'Trusted Care', desc: '29+ years of clinical excellence and patient safety.' },
-    { icon: Clock, title: 'Emergency Services', desc: '24/7 Level-1 trauma response & intensive care.' },
-    { icon: Lock, title: 'Secure Records', desc: '256-bit encrypted digital patient health portal.' },
-    { icon: Award, title: 'High Satisfaction', desc: '99% patient approval rating across all campuses.' }
+    { icon: Stethoscope, title: 'Elite Clinical Faculty', desc: 'Consult with leading researchers and senior surgeons.' },
+    { icon: Activity, title: 'Advanced Clinical Systems', desc: 'State-of-the-art robotic suites and high-fidelity testing.' },
+    { icon: HeartPulse, title: 'Clinical Standards', desc: 'Over two decades of audited patient outcomes and safety.' },
+    { icon: Clock, title: 'Priority Trauma Wings', desc: 'On-demand emergency care and trauma critical units.' },
+    { icon: Lock, title: 'Encrypted Health Portals', desc: 'Securely view your records, reports, and history.' },
+    { icon: Award, title: 'Outstanding Outcomes', desc: 'Highly rated clinical performance and recovery metrics.' }
   ];
 
   return (
@@ -93,14 +93,14 @@ const About = () => {
               </span>
 
               <h1 className="font-headline text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
-                Building a Healthier <br />
+                A Legacy of Healing & <br />
                 <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-blue-400 bg-clip-text text-transparent italic">
-                  Tomorrow Together
+                  Patient Dedication
                 </span>
               </h1>
 
               <p className="text-slate-300 text-base md:text-lg leading-relaxed font-medium">
-                Founded in 1995, Clinical Serenity has evolved from a single neighborhood clinic into a leading multi-specialty healthcare network. Our commitment to clinical excellence is matched only by our dedication to compassionate, patient-centered care.
+                Since 1995, Prana Health has grown from a single community center into an integrated care network, built on foundations of trust, dignity, and clinical excellence.
               </p>
 
               {/* Mission & Vision Cards */}
@@ -111,7 +111,7 @@ const About = () => {
                   </div>
                   <h4 className="font-bold text-white text-base mb-1">Our Mission</h4>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    To provide world-class medical excellence with compassion, integrity, and precision.
+                    To deliver clinical outcomes of the highest standard with precision, dignity, and care.
                   </p>
                 </div>
 
@@ -121,7 +121,7 @@ const About = () => {
                   </div>
                   <h4 className="font-bold text-white text-base mb-1">Our Vision</h4>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    To be the most trusted, patient-preferred healthcare partner in every community we serve.
+                    To set the benchmark for patient-centered care and medical innovation in every community.
                   </p>
                 </div>
               </div>
@@ -141,7 +141,7 @@ const About = () => {
               {/* Years Experience Badge */}
               <div className="absolute -bottom-6 -left-6 bg-emerald-500 text-slate-950 p-6 rounded-3xl shadow-2xl z-20 max-w-xs animate-bounce-subtle">
                 <div className="text-4xl font-black font-headline">29+</div>
-                <div className="text-xs font-black uppercase tracking-wider">Years of Healing & Excellence</div>
+                <div className="text-xs font-black uppercase tracking-wider">Years of Medical Leadership</div>
               </div>
             </div>
 
@@ -192,10 +192,10 @@ const About = () => {
               GOVERNANCE & EXCELLENCE
             </span>
             <h2 className="font-headline text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-3">
-              Senior Clinical Leadership
+              Clinical Board & Directors
             </h2>
             <p className="text-slate-500 text-base">
-              Experienced clinical directors and senior specialists steering our institution to international standards.
+              Meet the board-certified specialists directing our therapeutic wings and clinical departments.
             </p>
           </div>
           
@@ -257,10 +257,10 @@ const About = () => {
                 MILESTONES & GROWTH
               </span>
               <h2 className="font-headline text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-                Our Legacy of <br /><span className="text-emerald-600 italic">Trust & Innovation</span>
+                Milestones in <br /><span className="text-emerald-600 italic">Therapeutic Care</span>
               </h2>
               <p className="text-slate-500 text-base leading-relaxed">
-                From a single clinic to a multi-branch regional network, our history is defined by clinical excellence and the lives we've restored.
+                Our timeline mirrors the evolution of modern clinical practices, matching infrastructure growth with patient recovery.
               </p>
               <Link 
                 to="/doctors" 
@@ -316,10 +316,10 @@ const About = () => {
               PATIENT CONFIDENCE
             </span>
             <h2 className="font-headline text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-3">
-              Why Patients Choose Clinical Serenity
+              Why Patients Rely on Prana Health
             </h2>
             <p className="text-slate-500 text-base">
-              A commitment to patient comfort, cutting-edge technology, and transparent medical guidance.
+              Our core pillars focus on patient comfort, advanced diagnostics, and verified recovery standards.
             </p>
           </div>
 

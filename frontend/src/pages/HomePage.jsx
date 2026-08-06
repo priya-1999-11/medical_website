@@ -26,6 +26,12 @@ const HomePage = () => {
   const [openFaq, setOpenFaq] = useState(null);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
+  const [selectedWhyChoose, setSelectedWhyChoose] = useState(null);
+  
+  // Hero Slider states
+  const [sliderImages, setSliderImages] = useState([]);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [sliderAutoplay, setSliderAutoplay] = useState(true);
 
   useEffect(() => {
     const loadHomepageData = async () => {
@@ -37,11 +43,18 @@ const HomePage = () => {
         const pkgData = await packageService.getPackages();
         const provData = await insuranceService.getProviders();
 
+        const { data: sliderData } = await supabase
+          .from('hero_slider_images')
+          .select('*')
+          .eq('is_active', true)
+          .order('display_order', { ascending: true });
+
         setDoctors(docData || []);
         setDepartments(deptData || []);
         setHospitals(hospData ? hospData.slice(0, 3) : []);
         setPackages(pkgData ? pkgData.slice(0, 3) : []);
         setInsuranceProviders(provData || []);
+        setSliderImages(sliderData || []);
       } catch (err) {
         console.error('Error loading homepage data:', err);
       } finally {
@@ -50,6 +63,22 @@ const HomePage = () => {
     };
     loadHomepageData();
   }, []);
+
+  const defaultSlide = {
+    title: "State-of-the-Art Hospital Plaza",
+    image_url: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1200&auto=format&fit=crop",
+    subtitle: "Main Campus • Open 24 Hours"
+  };
+
+  const activeSlides = sliderImages.length > 0 ? sliderImages : [defaultSlide];
+
+  useEffect(() => {
+    if (!sliderAutoplay || activeSlides.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentSlideIndex((prev) => (prev + 1) % activeSlides.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, [sliderAutoplay, activeSlides.length]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -80,7 +109,7 @@ const HomePage = () => {
     <div className="min-h-screen bg-white text-slate-800 font-sans flex flex-col justify-between overflow-x-hidden relative">
       {/* Hospital Theme Background Layer with Opacity */}
       <div 
-        className="fixed inset-0 bg-cover bg-center pointer-events-none z-0 opacity-[0.06]"
+        className="fixed inset-0 bg-cover bg-center pointer-events-none z-0 opacity-[0.14]"
         style={{ backgroundImage: `url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1600&auto=format&fit=crop')` }}
       />
 
@@ -88,34 +117,40 @@ const HomePage = () => {
         <NavBar />
 
         {/* ========================================================= */}
-        {/* 1. HERO SECTION — CLEAN HOSPITAL THEME (#275B99 + #4D9B2A + WHITE) */}
+        {/* 1. HERO SECTION — FULL-WIDTH HOSPITAL BACKGROUND WITH DARK OVERLAY */}
         {/* ========================================================= */}
-        <section className="pt-28 pb-20 md:pt-36 md:pb-24 bg-gradient-to-b from-blue-50/70 via-white/80 to-white/90 border-b border-slate-100 relative">
-          <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <section 
+          className="relative pt-28 pb-20 md:pt-36 md:pb-28 bg-cover bg-center overflow-hidden border-b border-blue-900"
+          style={{ backgroundImage: `url('https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?q=80&w=1600&auto=format&fit=crop')` }}
+        >
+          {/* Dark Brand Overlay (Blue/Slate blend matching logo colors) */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-900/80 to-[#163861]/75 z-0" />
+
+          <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
             <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
               
               {/* Hero Left Content */}
               <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
                 
                 {/* Hospital Badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 border border-green-200 text-[#4D9B2A] text-xs font-bold tracking-wide">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-[#4D9B2A] text-xs font-bold tracking-wide">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#4D9B2A] animate-pulse" />
-                  <span>PRANA Healthcare Services Network</span>
+                  <span className="text-white">PRANA Healthcare Services Network</span>
                 </div>
 
                 {/* Main Headline */}
-                <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-slate-900 leading-[1.15]">
-                  Trusted Healthcare for <br />
-                  <span className="text-[#275B99]">You & Your Family</span>
+                <h1 className="font-headline text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-white leading-[1.15]">
+                  <span style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}>Integrated Care Built Around</span> <br />
+                  <span className="text-[#4d9b2a]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}>You <span style={{ fontFamily: "'Manrope', sans-serif" }}>&</span> Your Loved Ones</span>
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-slate-600 text-base md:text-lg max-w-xl font-normal leading-relaxed mx-auto lg:mx-0">
-                  Access top-rated specialists, accredited hospitals, cashless insurance claim support, and 24/7 emergency medical care with PRANA Healthcare.
+                <p className="text-slate-300 text-base md:text-lg max-w-xl font-normal leading-relaxed mx-auto lg:mx-0">
+                  A unified ecosystem of clinical experts, modern hospital campuses, and transparent medical coverage. Caring for you at every milestone.
                 </p>
 
                 {/* Search Box */}
-                <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-5 shadow-xl border border-slate-200/80 max-w-xl mx-auto lg:mx-0 text-left">
+                <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 shadow-2xl border border-white/10 max-w-xl mx-auto lg:mx-0 text-left">
                   <form onSubmit={handleSearchSubmit} className="relative flex items-center">
                     <Search className="w-5 h-5 text-[#275B99] absolute left-4 top-1/2 -translate-y-1/2" />
                     <input
@@ -164,15 +199,15 @@ const HomePage = () => {
 
                   <Link
                     to="/doctors"
-                    className="py-4 px-8 bg-white hover:bg-green-50 text-[#4D9B2A] border-2 border-[#4D9B2A] font-bold text-sm rounded-2xl transition-all flex items-center gap-2.5 shadow-sm active:scale-95"
+                    className="py-4 px-8 bg-white/10 hover:bg-white/20 text-white border-2 border-white/20 font-bold text-sm rounded-2xl transition-all flex items-center gap-2.5 shadow-sm active:scale-95"
                   >
-                    <Stethoscope className="w-4.5 h-4.5" />
+                    <Stethoscope className="w-4.5 h-4.5 text-green-300" />
                     <span>Find Doctor</span>
                   </Link>
                 </div>
 
                 {/* Trust Badges */}
-                <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-slate-500 font-semibold">
+                <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-slate-300 font-semibold">
                   <div className="flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-[#4D9B2A]" />
                     <span>ISO 9001 Certified</span>
@@ -189,30 +224,67 @@ const HomePage = () => {
 
               </div>
 
-              {/* Hero Right — Hospital Facility / Medical Team Environment Banner */}
-              <div className="lg:col-span-5 relative flex items-center justify-center">
-                <div className="relative w-full aspect-[4/3] sm:aspect-[14/10] rounded-[2.5rem] overflow-hidden border-4 border-white shadow-2xl bg-slate-100">
-                  <img
-                    src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1200&auto=format&fit=crop"
-                    alt="PRANA Healthcare Services Hospital Plaza"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
+              {/* Hero Right — Hospital Facility Slider/Carousel */}
+              <div className="lg:col-span-5 relative flex flex-col items-center justify-center">
+                <div 
+                  className="relative w-full aspect-[4/3] sm:aspect-[14/10] rounded-[2.5rem] overflow-hidden border-4 border-white/20 shadow-2xl bg-slate-900/80 group cursor-pointer"
+                  onMouseEnter={() => setSliderAutoplay(false)}
+                  onMouseLeave={() => setSliderAutoplay(true)}
+                >
+                  {/* Slider Images with fade transition */}
+                  {activeSlides.map((slide, idx) => (
+                    <div
+                      key={slide.id || idx}
+                      className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                        idx === currentSlideIndex ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+                      }`}
+                    >
+                      <img
+                        src={slide.image_url}
+                        alt={slide.title || "PRANA Healthcare Services"}
+                        className="w-full h-full object-cover opacity-90"
+                      />
+                      
+                      {/* Banner overlay label */}
+                      <div className="absolute bottom-5 left-5 right-5 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-100 shadow-lg flex items-center gap-3 z-20">
+                        <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#275B99] flex items-center justify-center shrink-0">
+                          <Building2 className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h4 className="font-headline font-bold text-slate-900 text-sm">
+                            {slide.title || "State-of-the-Art Hospital Plaza"}
+                          </h4>
+                          <p className="text-[11px] text-[#4D9B2A] font-semibold">
+                            {slide.subtitle || "PRANA Partner Network • 24 Hours"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                   
-                  {/* Banner overlay label */}
-                  <div className="absolute bottom-5 left-5 right-5 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-100 shadow-lg flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#275B99] flex items-center justify-center shrink-0">
-                      <Building2 className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="font-headline font-bold text-slate-900 text-sm">State-of-the-Art Hospital Plaza</h4>
-                      <p className="text-[11px] text-[#4D9B2A] font-semibold">Main Campus • Open 24 Hours</p>
-                    </div>
-                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent z-10 pointer-events-none" />
                 </div>
 
+                {/* Navigation dots below the slider */}
+                {activeSlides.length > 1 && (
+                  <div className="flex gap-2.5 mt-4 z-20 relative">
+                    {activeSlides.map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setCurrentSlideIndex(idx)}
+                        className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                          idx === currentSlideIndex 
+                            ? 'bg-[#4D9B2A] w-6' 
+                            : 'bg-white/40 hover:bg-white/75'
+                        }`}
+                        title={`Go to slide ${idx + 1}`}
+                      />
+                    ))}
+                  </div>
+                )}
+
                 {/* Floating Badge — Rating */}
-                <div className="absolute -top-4 -right-2 sm:right-2 bg-white p-3.5 px-5 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-3">
+                <div className="absolute -top-4 -right-2 sm:right-2 bg-white p-3.5 px-5 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-3 z-30 pointer-events-none">
                   <div className="w-9 h-9 rounded-xl bg-green-50 text-[#4D9B2A] flex items-center justify-center font-bold">
                     <Star className="w-5 h-5 fill-[#4D9B2A]" />
                   </div>
@@ -221,7 +293,6 @@ const HomePage = () => {
                     <span className="text-[10px] text-slate-500 font-semibold">12,000+ Happy Patients</span>
                   </div>
                 </div>
-
               </div>
 
             </div>
@@ -238,21 +309,21 @@ const HomePage = () => {
                 Patient Services
               </span>
               <h2 className="font-headline text-3xl font-black text-slate-900">
-                Quick Healthcare Access
+                Seamless Care Access
               </h2>
               <p className="text-slate-600 text-sm">
-                Explore our full suite of medical and hospital services designed for fast, seamless care.
+                Direct connection to specialized clinical wings, recovery centers, and digital claims support.
               </p>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
               {[
-                { title: 'Doctors', subtitle: 'Find Specialists', icon: Stethoscope, path: '/doctors', bg: 'bg-blue-50 text-[#275B99]' },
-                { title: 'Hospitals', subtitle: 'Explore Campuses', icon: Building2, path: '/hospitals', bg: 'bg-green-50 text-[#4D9B2A]' },
-                { title: 'Insurance', subtitle: 'Cashless Claims', icon: ShieldCheck, path: '/insurance', bg: 'bg-blue-50 text-[#275B99]' },
-                { title: 'Health Packages', subtitle: 'Full Checkups', icon: Activity, path: '/packages', bg: 'bg-green-50 text-[#4D9B2A]' },
-                { title: 'Diagnostics', subtitle: 'Lab Tests & Imaging', icon: Microscope, path: '/book-appointment', bg: 'bg-blue-50 text-[#275B99]' },
-                { title: 'Emergency Care', subtitle: '24/7 Rapid Help', icon: Phone, path: '/book-appointment', bg: 'bg-green-50 text-[#4D9B2A]' },
+                { title: 'Clinical Specialists', subtitle: 'Expert consultations', icon: Stethoscope, path: '/doctors', bg: 'bg-blue-50 text-[#275B99]' },
+                { title: 'Our Care Facilities', subtitle: 'State-of-the-art centers', icon: Building2, path: '/hospitals', bg: 'bg-green-50 text-[#4D9B2A]' },
+                { title: 'Direct Coverage', subtitle: 'Stress-free billing', icon: ShieldCheck, path: '/insurance', bg: 'bg-blue-50 text-[#275B99]' },
+                { title: 'Wellness Panels', subtitle: 'Proactive screenings', icon: Activity, path: '/packages', bg: 'bg-green-50 text-[#4D9B2A]' },
+                { title: 'Advanced Diagnostics', subtitle: 'High-precision testing', icon: Microscope, path: '/book-appointment', bg: 'bg-blue-50 text-[#275B99]' },
+                { title: 'Immediate Response', subtitle: '24/7 emergency dispatch', icon: Phone, path: '/book-appointment', bg: 'bg-green-50 text-[#4D9B2A]' },
               ].map((serv, idx) => {
                 const IconComp = serv.icon;
                 return (
@@ -284,22 +355,22 @@ const HomePage = () => {
               
               <div className="space-y-1 p-4">
                 <div className="font-headline text-3xl sm:text-4xl md:text-5xl font-black text-white">500+</div>
-                <div className="text-xs sm:text-sm font-semibold text-blue-100">Certified Doctors</div>
+                <div className="text-xs sm:text-sm font-semibold text-blue-100">Medical Experts</div>
               </div>
 
               <div className="space-y-1 p-4">
                 <div className="font-headline text-3xl sm:text-4xl md:text-5xl font-black text-white">50+</div>
-                <div className="text-xs sm:text-sm font-semibold text-blue-100">Empaneled Hospitals</div>
+                <div className="text-xs sm:text-sm font-semibold text-blue-100">Integrated Facilities</div>
               </div>
 
               <div className="space-y-1 p-4">
                 <div className="font-headline text-3xl sm:text-4xl md:text-5xl font-black text-white">10,000+</div>
-                <div className="text-xs sm:text-sm font-semibold text-blue-100">Happy Patients Care</div>
+                <div className="text-xs sm:text-sm font-semibold text-blue-100">Lives Restored</div>
               </div>
 
               <div className="space-y-1 p-4">
                 <div className="font-headline text-3xl sm:text-4xl md:text-5xl font-black text-[#4D9B2A] bg-white/10 rounded-2xl py-1">24/7</div>
-                <div className="text-xs sm:text-sm font-semibold text-blue-100 mt-1">Emergency Support</div>
+                <div className="text-xs sm:text-sm font-semibold text-blue-100 mt-1">Priority Trauma Care</div>
               </div>
 
             </div>
@@ -317,60 +388,66 @@ const HomePage = () => {
                 Clinical Excellence
               </span>
               <h2 className="font-headline text-3xl md:text-4xl font-black text-slate-900">
-                Why Choose PRANA Healthcare
+                Redefining the Care Journey
               </h2>
               <p className="text-slate-600 text-sm md:text-base">
-                We combine compassionate patient care with medical innovation, digital efficiency, and accredited quality standards.
+                Experience an integrated approach that connects elite specialists, modern infrastructure, and digitized workflows.
               </p>
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 {
-                  title: 'Expert Specialists',
-                  desc: 'Over 500+ board-certified senior doctors across all major surgical and clinical specialties.',
+                  title: 'Board-Certified Leaders',
+                  desc: 'Consult with recognized specialists who lead their respective medical disciplines with honor and care.',
                   icon: Users,
                   color: 'text-[#275B99] bg-blue-50 border-blue-100'
                 },
                 {
-                  title: 'Cashless Insurance',
-                  desc: 'Direct tie-ups with leading insurance providers for instant hospitalization pre-authorization.',
+                  title: 'Direct Billing Integration',
+                  desc: 'Enjoy stress-free administration with real-time coverage approvals directly at our desks.',
                   icon: ShieldCheck,
                   color: 'text-[#4D9B2A] bg-green-50 border-green-100'
                 },
                 {
-                  title: 'Modern Equipment',
-                  desc: 'State-of-the-art diagnostic laboratories, high-resolution MRI/CT, and modular operation theaters.',
+                  title: 'Advanced Medical Technology',
+                  desc: 'Benefit from precision instrumentation, robot-assisted surgical suites, and high-fidelity testing.',
                   icon: Microscope,
                   color: 'text-[#275B99] bg-blue-50 border-blue-100'
                 },
                 {
-                  title: 'Online Appointments',
-                  desc: 'Book consultation slots in real-time without long queue waiting times.',
+                  title: 'Frictionless Scheduling',
+                  desc: 'Secure your priority time slot online to eliminate unnecessary waiting room delays.',
                   icon: Calendar,
                   color: 'text-[#4D9B2A] bg-green-50 border-green-100'
                 },
                 {
-                  title: 'Digital Health Records',
-                  desc: 'Encrypted digital portal to access medical prescriptions, lab reports, and treatment history anywhere.',
+                  title: 'Integrated Clinical Portal',
+                  desc: 'Access your entire medical file, test results, and care history on a secure, encrypted portal.',
                   icon: FileText,
                   color: 'text-[#275B99] bg-blue-50 border-blue-100'
                 },
                 {
-                  title: 'Emergency Support',
-                  desc: 'Dedicated 24/7 trauma care desk with rapid ambulance dispatch and emergency triage.',
+                  title: 'Priority Trauma Response',
+                  desc: 'Rely on Level-1 trauma response teams and intensive care physicians active round-the-clock.',
                   icon: Phone,
                   color: 'text-[#4D9B2A] bg-green-50 border-green-100'
                 },
               ].map((item, idx) => {
                 const ItemIcon = item.icon;
+                const isSelected = selectedWhyChoose === idx;
                 return (
                   <div
                     key={idx}
-                    className="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm hover:shadow-xl transition-all space-y-4 flex flex-col justify-between"
+                    onClick={() => setSelectedWhyChoose(isSelected ? null : idx)}
+                    className={`cursor-pointer rounded-3xl p-8 border transition-all duration-300 space-y-4 flex flex-col justify-between select-none ${
+                      isSelected 
+                        ? 'bg-slate-200/95 border-[#275B99] shadow-inner scale-[0.98]' 
+                        : 'bg-white border-slate-200/80 shadow-sm hover:shadow-xl hover:bg-slate-50'
+                    }`}
                   >
                     <div className="space-y-4">
-                      <div className={`w-14 h-14 rounded-2xl ${item.color} border flex items-center justify-center`}>
+                      <div className={`w-14 h-14 rounded-2xl ${item.color} border flex items-center justify-center transition-transform ${isSelected ? 'scale-110' : ''}`}>
                         <ItemIcon className="w-7 h-7" />
                       </div>
                       <h3 className="font-headline font-bold text-xl text-slate-900">{item.title}</h3>
@@ -378,7 +455,7 @@ const HomePage = () => {
                     </div>
                     <div className="flex items-center gap-2 text-xs font-bold text-[#275B99] pt-2">
                       <Check className="w-4 h-4 text-[#4D9B2A]" />
-                      <span>Verified Healthcare Standard</span>
+                      <span>{isSelected ? 'Selected Feature Highlight' : 'Verified Healthcare Standard'}</span>
                     </div>
                   </div>
                 );
@@ -465,7 +542,7 @@ const HomePage = () => {
                   Accredited Network
                 </span>
                 <h2 className="font-headline text-3xl font-black text-slate-900">
-                  Trusted Hospital Campuses
+                  Our Integrated Centers
                 </h2>
               </div>
 
@@ -478,37 +555,54 @@ const HomePage = () => {
               </Link>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              {(hospitals.length > 0 ? hospitals : [
-                { id: 1, hospital_name: 'PRANA Healthcare Central Hospital', address: 'Medical Plaza District', city: 'Citywest', banner_url: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=600&auto=format&fit=crop' },
-                { id: 2, hospital_name: 'PRANA Healthcare Metro Care', address: 'Healthcare Boulevard 400', city: 'Metropolis', banner_url: 'https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?q=80&w=600&auto=format&fit=crop' },
-                { id: 3, hospital_name: 'PRANA Healthcare Specialty Center', address: 'Green Valley Medical Park', city: 'Eastside', banner_url: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=600&auto=format&fit=crop' }
-              ]).map((hosp) => (
-                <div key={hosp.id} className="bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
-                  <div className="space-y-4">
-                    <div className="relative h-48 bg-slate-900">
-                      <img src={hosp.banner_url || hosp.logo_url || 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=600'} alt={hosp.hospital_name} className="w-full h-full object-cover" />
-                      <div className="absolute top-3 right-3 bg-[#4D9B2A] text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">
-                        24/7 OPEN
+            {hospitals.length === 0 ? (
+              <div className="bg-white rounded-3xl p-12 text-center border border-slate-200/80 shadow-sm max-w-md mx-auto w-full">
+                <p className="text-slate-500 font-medium text-sm">No Hospitals Available.</p>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-3 gap-8">
+                {hospitals.map((hosp) => (
+                  <div key={hosp.id} className="bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
+                    <div className="space-y-4">
+                      <div className="relative h-48 bg-slate-900">
+                        <img src={hosp.banner_url || hosp.logo_url || 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=600'} alt={hosp.hospital_name} className="w-full h-full object-cover" />
+                        <div className="absolute top-3 right-3 bg-[#4D9B2A] text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">
+                          24/7 OPEN
+                        </div>
+                      </div>
+                      <div className="p-6 pt-0 space-y-1">
+                        <h3 className="font-headline font-bold text-slate-900 text-lg line-clamp-1">{hosp.hospital_name}</h3>
+                        <p className="text-xs text-slate-500 font-medium flex items-center gap-1">
+                          <MapPin className="w-3.5 h-3.5 text-[#275B99]" />
+                          <span className="truncate">{hosp.address}, {hosp.city}</span>
+                        </p>
                       </div>
                     </div>
-                    <div className="p-6 pt-0 space-y-1">
-                      <h3 className="font-headline font-bold text-slate-900 text-lg">{hosp.hospital_name}</h3>
-                      <p className="text-xs text-slate-500 font-medium flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-[#275B99]" />
-                        <span>{hosp.address}, {hosp.city}</span>
-                      </p>
+
+                    <div className="p-6 pt-0 space-y-2">
+                      <Link to={`/hospitals/${hosp.id}`} className="w-full py-3 bg-[#275B99] hover:bg-[#1F4B80] text-white rounded-xl text-xs font-bold transition-all text-center block active:scale-95">
+                        Explore Hospital Details
+                      </Link>
+                      {hosp.website ? (
+                        <a
+                          href={hosp.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-xs transition-all text-center flex items-center justify-center gap-1 border border-slate-200"
+                        >
+                          <span>Visit Website</span>
+                          <ArrowRight className="w-3 h-3 text-slate-500" />
+                        </a>
+                      ) : (
+                        <div className="w-full py-2 bg-slate-50 text-slate-400 rounded-xl font-medium text-xs text-center border border-slate-100 select-none">
+                          Website Not Available
+                        </div>
+                      )}
                     </div>
                   </div>
-
-                  <div className="p-6 pt-0">
-                    <Link to={`/hospitals/${hosp.id}`} className="w-full py-3 bg-[#275B99] hover:bg-[#1F4B80] text-white rounded-xl text-xs font-bold transition-all text-center block active:scale-95">
-                      Explore Hospital Details
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
 
           </div>
         </section>
@@ -523,7 +617,7 @@ const HomePage = () => {
                 Insurance Coverage
               </span>
               <h2 className="font-headline text-2xl md:text-3xl font-black text-slate-900">
-                Empaneled Cashless Insurance Partners
+                Direct Coverage Partners
               </h2>
             </div>
 
@@ -543,7 +637,7 @@ const HomePage = () => {
             </div>
 
             <p className="text-xs text-slate-500 font-medium">
-              Need help with cashless claims? <Link to="/insurance" className="text-[#275B99] font-bold hover:underline">Visit Cashless Insurance Desk</Link>
+              Need coverage guidance? <Link to="/insurance" className="text-[#275B99] font-bold hover:underline">Connect with our billing coordinators</Link>
             </p>
           </div>
         </section>
@@ -560,7 +654,7 @@ const HomePage = () => {
                   Preventive Care
                 </span>
                 <h2 className="font-headline text-3xl font-black text-slate-900">
-                  Popular Health Checkup Packages
+                  Proactive Screenings & Health Panels
                 </h2>
               </div>
 
@@ -573,38 +667,40 @@ const HomePage = () => {
               </Link>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              {(packages.length > 0 ? packages : [
-                { id: 1, package_name: 'Full Body Health Screening', total_tests: 60, discounted_price: 149, original_price: 299, description: 'Comprehensive blood check, lipid profile, liver function, and kidney tests.' },
-                { id: 2, package_name: 'Cardiac Wellness Package', total_tests: 45, discounted_price: 199, original_price: 350, description: 'ECG, Lipid profile, TSH, Echo evaluation, and cardiologist consultation.' },
-                { id: 3, package_name: 'Senior Citizen Care Package', total_tests: 75, discounted_price: 249, original_price: 499, description: 'Complete geriatric assessment, bone density, diabetes screening, and vital organ scan.' }
-              ]).map((pkg) => (
-                <div key={pkg.id} className="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm hover:shadow-xl transition-all space-y-6 flex flex-col justify-between">
-                  <div className="space-y-4">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-50 text-[#4D9B2A] rounded-full text-xs font-bold border border-green-200">
-                      <span>{pkg.total_tests || 50}+ Tests Included</span>
+            {packages.length === 0 ? (
+              <div className="bg-white rounded-3xl p-12 text-center border border-slate-200/80 shadow-sm max-w-md mx-auto w-full">
+                <p className="text-slate-500 font-medium text-sm">No Diagnostic Packages Available.</p>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-3 gap-8">
+                {packages.map((pkg) => (
+                  <div key={pkg.id} className="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm hover:shadow-xl transition-all space-y-6 flex flex-col justify-between">
+                    <div className="space-y-4">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-50 text-[#4D9B2A] rounded-full text-xs font-bold border border-green-200">
+                        <span>{pkg.total_tests || 75}+ Parameters</span>
+                      </div>
+
+                      <h3 className="font-headline font-bold text-xl text-slate-900">{pkg.package_name}</h3>
+                      <p className="text-slate-600 text-xs leading-relaxed line-clamp-3">{pkg.description}</p>
+
+                      <div className="flex items-baseline gap-3 pt-2">
+                        <span className="text-2xl font-black text-slate-900">${pkg.price}</span>
+                        {pkg.original_price && pkg.original_price > pkg.price && (
+                          <span className="text-sm text-slate-400 line-through font-medium">${pkg.original_price}</span>
+                        )}
+                      </div>
                     </div>
 
-                    <h3 className="font-headline font-bold text-xl text-slate-900">{pkg.package_name}</h3>
-                    <p className="text-slate-600 text-xs leading-relaxed">{pkg.description}</p>
-
-                    <div className="flex items-baseline gap-3 pt-2">
-                      <span className="text-2xl font-black text-slate-900">${pkg.discounted_price || 149}</span>
-                      {pkg.original_price && (
-                        <span className="text-sm text-slate-400 line-through font-medium">${pkg.original_price}</span>
-                      )}
-                    </div>
+                    <Link
+                      to={`/packages/${pkg.id}`}
+                      className="w-full py-3.5 bg-[#275B99] hover:bg-[#1F4B80] text-white rounded-2xl font-bold text-xs shadow-md transition-all text-center block active:scale-95"
+                    >
+                      Book Health Package
+                    </Link>
                   </div>
-
-                  <Link
-                    to={`/packages`}
-                    className="w-full py-3.5 bg-[#275B99] hover:bg-[#1F4B80] text-white rounded-2xl font-bold text-xs shadow-md transition-all text-center block active:scale-95"
-                  >
-                    Book Health Package
-                  </Link>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
 
           </div>
         </section>
@@ -620,7 +716,7 @@ const HomePage = () => {
                 Patient Feedback
               </span>
               <h2 className="font-headline text-3xl font-black text-slate-900">
-                What Our Patients Say
+                Real Care Outcomes
               </h2>
             </div>
 
@@ -628,20 +724,20 @@ const HomePage = () => {
               {[
                 {
                   name: 'Sarah Jenkins',
-                  role: 'Cardiology Patient',
-                  comment: 'The cardiology team at PRANA Healthcare was exceptional. Appointment booking was instant, and the doctor took time to explain my treatment plan clearly.',
+                  role: 'Cardiovascular Patient',
+                  comment: 'The care I received at the cardiac center was outstanding. The scheduling was direct, and the clinical team outlined my options with great clarity.',
                   rating: 5
                 },
                 {
                   name: 'Robert Miller',
-                  role: 'Cashless Insurance Patient',
-                  comment: 'Cashless claim clearance took under 30 minutes! Exceptional hospital facilities, courteous nursing staff, and smooth discharge process.',
+                  role: 'Integrated Billing Patient',
+                  comment: 'The billing coordination took less than thirty minutes. Outstanding clinical facilities, highly supportive nursing care, and a smooth return home.',
                   rating: 5
                 },
                 {
                   name: 'Elena Rostova',
-                  role: 'Health Checkup Patient',
-                  comment: 'Booked the full body package online. Home sample collection arrived right on time, and my reports were uploaded directly to my portal.',
+                  role: 'Wellness Screening Patient',
+                  comment: 'Scheduled my screening panel online. The lab clinician arrived precisely on time, and my records were available securely within the day.',
                   rating: 5
                 }
               ].map((test, idx) => (
@@ -687,16 +783,16 @@ const HomePage = () => {
           <div className="space-y-3">
             {[
               {
-                q: "How do I book an appointment with a doctor?",
-                a: "Use our search bar above, pick your preferred specialist, select an open date/time slot, and confirm your booking instantly."
+                q: "How do I schedule a consultation with a specialist?",
+                a: "Use the clinical search bar, select your specialist, choose from the real-time calendar, and confirm your slot instantly."
               },
               {
-                q: "How does cashless health insurance hospitalization work?",
-                a: "Our insurance desk contacts your insurer (Star Health, Care Health, HDFC ERGO, Niva Bupa) to issue instant cashless pre-authorization."
+                q: "How is direct medical coverage coordinated?",
+                a: "Our billing desk coordinates directly with your provider to process pre-authorization approvals within thirty minutes."
               },
               {
-                q: "Can I get home sample collection for diagnostic lab packages?",
-                a: "Yes! Choose any health checkup package and select a morning slot for free home sample collection."
+                q: "Are screenings available with home sample collection?",
+                a: "Yes, selecting any wellness panel allows you to request home collection at your convenience."
               }
             ].map((faq, idx) => {
               const isOpen = openFaq === idx;

@@ -22,6 +22,7 @@ import AdminInsurance from './pages/admin/AdminInsurance';
 import AdminPackages from './pages/admin/AdminPackages';
 import AdminSettings from './pages/admin/AdminSettings';
 import AdminLogin from './pages/admin/AdminLogin';
+import AdminHeroSlider from './pages/admin/AdminHeroSlider';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Doctor Dashboard Imports
@@ -75,6 +76,7 @@ function App() {
           <Route path="appointments" element={<AdminAppointments />} />
           <Route path="patients" element={<AdminPatients />} />
           <Route path="settings" element={<AdminSettings />} />
+          <Route path="slider" element={<AdminHeroSlider />} />
         </Route>
 
         {/* Doctor Routes (New) */}

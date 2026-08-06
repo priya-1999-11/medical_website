@@ -6,6 +6,7 @@ from supabase import create_client, Client
 from dotenv import load_dotenv
 import os
 from pathlib import Path
+import uuid
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -40,7 +41,7 @@ SEED_INSURANCE_DATA = {
             "id": PROVIDER_IDS["star"],
             "provider_name": "Star Health Insurance",
             "provider_logo": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=200&h=200&auto=format&fit=crop",
-            "description": "Leading specialist health insurer with over 14,000+ cashless hospital networks across the nation.",
+            "description": "Leading health insurer with over 14,000+ network hospitals providing direct coordination.",
             "support_email": "support@starhealth.in",
             "support_phone": "+1 (800) 425-2255",
             "website": "https://starhealth.in",
@@ -50,7 +51,7 @@ SEED_INSURANCE_DATA = {
             "id": PROVIDER_IDS["care"],
             "provider_name": "Care Health Insurance",
             "provider_logo": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=200&h=200&auto=format&fit=crop",
-            "description": "Comprehensive health protection offering high sum insured, annual health checkups, and instant pre-authorization.",
+            "description": "Comprehensive wellness protection offering sum insured options, health tracking, and direct coordination desks.",
             "support_email": "customerfirst@careinsurance.com",
             "support_phone": "+1 (800) 102-4488",
             "website": "https://careinsurance.com",
@@ -60,7 +61,7 @@ SEED_INSURANCE_DATA = {
             "id": PROVIDER_IDS["hdfc"],
             "provider_name": "HDFC ERGO Health Insurance",
             "provider_logo": "https://images.unsplash.com/photo-1556742049-0a670f4a4587?q=80&w=200&h=200&auto=format&fit=crop",
-            "description": "Trusted provider with 10,000+ hospital partnerships, 2-hour cashless approval, and zero co-payment options.",
+            "description": "Specialized partner with 10,000+ hospital alliances, rapid approval times, and direct settlement channels.",
             "support_email": "care@hdfcergo.com",
             "support_phone": "+1 (800) 266-6444",
             "website": "https://hdfcergo.com",
@@ -70,7 +71,7 @@ SEED_INSURANCE_DATA = {
             "id": PROVIDER_IDS["bupa"],
             "provider_name": "Niva Bupa Health Insurance",
             "provider_logo": "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=200&h=200&auto=format&fit=crop",
-            "description": "Specialized health policies offering global coverage, maternity protection, and senior citizen wellness.",
+            "description": "Health policies offering global care coverage, maternal care, and age-based wellness panels.",
             "support_email": "customercare@nivabupa.com",
             "support_phone": "+1 (800) 301-03333",
             "website": "https://nivabupa.com",
@@ -84,7 +85,7 @@ SEED_INSURANCE_DATA = {
             "plan_name": "Star Comprehensive Health Plan",
             "plan_type": "Family Floater",
             "coverage_amount": 100000.0,
-            "description": "No sub-limits on room rent, automatic restoration of basic sum insured, and annual health checkups for family.",
+            "description": "No room restrictions, automatic restoration of base cover, and wellness panels for the entire family.",
             "eligibility": "Age 18 to 65 years. Dependent children covered up to 25 years.",
             "waiting_period": "30 days initial waiting period; 24 months for pre-existing conditions.",
             "status": "active"
@@ -95,7 +96,7 @@ SEED_INSURANCE_DATA = {
             "plan_name": "Star Senior Citizens Red Carpet Plan",
             "plan_type": "Senior Citizen",
             "coverage_amount": 50000.0,
-            "description": "Tailored for senior citizens with no pre-insurance medical test required up to 75 years of age.",
+            "description": "Tailored support for senior citizens with simplified pre-admission health screenings.",
             "eligibility": "Age 60 to 75 years.",
             "waiting_period": "12 months for pre-existing diseases.",
             "status": "active"
@@ -106,7 +107,7 @@ SEED_INSURANCE_DATA = {
             "plan_name": "Care Supreme Unlimited Super Plan",
             "plan_type": "Individual & Family",
             "coverage_amount": 250000.0,
-            "description": "Unlimited cumulative bonus, organ donor coverage, day-care procedures, and 500% sum insured restoration.",
+            "description": "Cumulative wellness bonuses, donor care, clinical daycare procedures, and automatic restoration.",
             "eligibility": "Any individual above 18 years.",
             "waiting_period": "30 days initial waiting period.",
             "status": "active"
@@ -117,7 +118,7 @@ SEED_INSURANCE_DATA = {
             "plan_name": "HDFC ERGO Optima Secure Plan",
             "plan_type": "Super Top-Up & Comprehensive",
             "coverage_amount": 150000.0,
-            "description": "4x coverage benefit: 2x base cover from day 1, 100% renewal bonus, and 100% secure benefit.",
+            "description": "Enhanced coverage benefits: double base cover from day one, renewal bonuses, and secure benefits.",
             "eligibility": "Age 18 to 65 years.",
             "waiting_period": "24 months for named ailments.",
             "status": "active"
@@ -184,35 +185,65 @@ SEED_INSURANCE_DATA = {
 
 SEED_FAQS = [
     {
-        "question": "How does Cashless Insurance work at Clinical Serenity hospitals?",
-        "answer": "At any network hospital, present your health insurance e-card and photo ID at the Insurance Helpdesk. Our team submits a pre-authorization request directly to your insurer. Once approved, hospital bills are settled directly with the insurer with zero out-of-pocket payment for covered expenses."
+        "question": "How is direct billing coordinated at Prana network hospitals?",
+        "answer": "Present your health card and photo identification at the hospital Care Desk. Our coordinators submit authorization requests directly to your provider. Upon approval, hospital expenses are settled directly with the provider."
     },
     {
-        "question": "What is the pre-authorization approval time for emergency admissions?",
-        "answer": "Emergency pre-authorization requests are fast-tracked within 15 to 30 minutes at our 24/7 Trauma Insurance Desk. Planned admissions require pre-authorization requests submitted 48 hours prior to admission."
+        "question": "What is the approval time for emergency coordination?",
+        "answer": "Emergency admission authorizations are fast-tracked within thirty minutes by our 24/7 trauma desks. Planned care requires coordination requests submitted 48 hours prior."
     },
     {
-        "question": "What documents are required to file a reimbursement claim?",
-        "answer": "You will need: 1) Duly filled & signed claim form, 2) Original hospital discharge summary, 3) Itemized final hospital bill & payment receipts, 4) Diagnostic lab reports & prescriptions, 5) Patient ID proof & canceled cheque for direct bank transfer."
+        "question": "What files are required to register a claim?",
+        "answer": "You will need: 1) Signed claim registration form, 2) Original discharge summary, 3) Final billing details & receipts, 4) Diagnostic reports, 5) Patient identification files."
     },
     {
-        "question": "Can I claim insurance if I am admitted to a non-network hospital?",
-        "answer": "Yes! If admitted to a non-network facility, you can file a Reimbursement Claim. Pay the hospital bills during discharge and submit original bills, discharge summary, and diagnostic reports via our Online Claim Submission Portal for processing."
+        "question": "Can coverage be claimed for admissions to non-network facilities?",
+        "answer": "Yes, if admitted to a non-network facility, you can file for reimbursement. Settle the bills upon discharge and upload your invoices, discharge summaries, and diagnostics to our portal."
     }
 ]
 
 
+def to_uuid(id_str):
+    if not id_str:
+        return None
+    try:
+        uuid.UUID(id_str)
+        return id_str
+    except ValueError:
+        pass
+    return str(uuid.uuid5(uuid.NAMESPACE_DNS, id_str))
+
 def seed_insurance_all():
+    print("Seed disabled: data is managed manually via the admin dashboard. Skipping auto-seed.")
+    return {}
+
+def _seed_insurance_all_internal():
+    """Internal seed function - only call this explicitly during initial setup."""
     print("Beginning Insurance Module Data Seeding...")
     if not supabase_client:
         print("Warning: Supabase client is not available. Returning local seed dictionary.")
         return SEED_INSURANCE_DATA
 
     for table_name, records in SEED_INSURANCE_DATA.items():
+        mapped_records = []
+        for r in records:
+            item = r.copy()
+            if "id" in item:
+                item["id"] = to_uuid(item["id"])
+            if "provider_id" in item:
+                item["provider_id"] = to_uuid(item["provider_id"])
+            if "hospital_id" in item:
+                item["hospital_id"] = to_uuid(item["hospital_id"])
+            if "plan_id" in item:
+                item["plan_id"] = to_uuid(item["plan_id"])
+            if "claim_id" in item:
+                item["claim_id"] = to_uuid(item["claim_id"])
+            mapped_records.append(item)
+
         try:
-            print(f"Upserting {len(records)} records into table '{table_name}'...")
-            supabase_client.table(table_name).upsert(records).execute()
-            print(f"✓ Table '{table_name}' seeded successfully.")
+            print(f"Upserting {len(mapped_records)} records into table '{table_name}'...")
+            supabase_client.table(table_name).upsert(mapped_records).execute()
+            print(f"[OK] Table '{table_name}' seeded successfully.")
         except Exception as e:
             print(f"Note/Error seeding '{table_name}': {e}")
 

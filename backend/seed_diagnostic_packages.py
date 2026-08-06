@@ -47,12 +47,12 @@ HOSPITAL_IDS = {
 
 SEED_DIAGNOSTIC_DATA = {
     "diagnostic_categories": [
-        {"id": CAT_IDS["full_body"], "category_name": "Full Body Checkup", "category_image": "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=400&h=400&auto=format&fit=crop", "description": "Complete wellness evaluation covering major organs, blood parameters, and metabolic screening.", "status": "active"},
-        {"id": CAT_IDS["diabetes"], "category_name": "Diabetes Profile", "category_image": "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=400&h=400&auto=format&fit=crop", "description": "HbA1c, fasting glucose, insulin resistance, and diabetic kidney risk markers.", "status": "active"},
-        {"id": CAT_IDS["cardiac"], "category_name": "Cardiac Profile", "category_image": "https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?q=80&w=400&h=400&auto=format&fit=crop", "description": "Lipid markers, hs-CRP, cardiac enzymes, and cardiovascular risk evaluation.", "status": "active"},
-        {"id": CAT_IDS["women"], "category_name": "Women's Health Checkup", "category_image": "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=400&h=400&auto=format&fit=crop", "description": "Hormonal balances, bone density, anemia markers, and cervical & breast health screening.", "status": "active"},
-        {"id": CAT_IDS["men"], "category_name": "Men's Health Checkup", "category_image": "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=400&h=400&auto=format&fit=crop", "description": "Prostate screening (PSA), testosterone, cardiovascular risk, and vitality assessment.", "status": "active"},
-        {"id": CAT_IDS["senior"], "category_name": "Senior Citizen Package", "category_image": "https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=400&h=400&auto=format&fit=crop", "description": "Tailored geriatric screening including joint health, renal function, and memory markers.", "status": "active"},
+        {"id": CAT_IDS["full_body"], "category_name": "Full Body Wellness Profile", "category_image": "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=400&h=400&auto=format&fit=crop", "description": "Complete wellness evaluation covering major organs, blood parameters, and metabolic screening.", "status": "active"},
+        {"id": CAT_IDS["diabetes"], "category_name": "Diabetes Assessment & Organ Shield", "category_image": "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=400&h=400&auto=format&fit=crop", "description": "HbA1c, fasting glucose, insulin resistance, and diabetic kidney risk markers.", "status": "active"},
+        {"id": CAT_IDS["cardiac"], "category_name": "Cardiac Risk & Lipid Panel", "category_image": "https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?q=80&w=400&h=400&auto=format&fit=crop", "description": "Lipid markers, hs-CRP, cardiac enzymes, and cardiovascular risk evaluation.", "status": "active"},
+        {"id": CAT_IDS["women"], "category_name": "Women's Health & Hormonal Profile", "category_image": "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=400&h=400&auto=format&fit=crop", "description": "Hormonal balances, bone density, anemia markers, and cervical & breast health screening.", "status": "active"},
+        {"id": CAT_IDS["men"], "category_name": "Men's Health & Vitality Screening", "category_image": "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=400&h=400&auto=format&fit=crop", "description": "Prostate screening (PSA), testosterone, cardiovascular risk, and vitality assessment.", "status": "active"},
+        {"id": CAT_IDS["senior"], "category_name": "Senior Citizen Vital Care Panel", "category_image": "https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=400&h=400&auto=format&fit=crop", "description": "Tailored geriatric screening including joint health, renal function, and memory markers.", "status": "active"},
         {"id": CAT_IDS["thyroid"], "category_name": "Thyroid Profile", "category_image": "https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=400&h=400&auto=format&fit=crop", "description": "Complete T3, T4, TSH, and thyroid antibody assessment for metabolic balance.", "status": "active"},
         {"id": CAT_IDS["liver"], "category_name": "Liver Function Test", "category_image": "https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=400&h=400&auto=format&fit=crop", "description": "Bilirubin, SGOT, SGPT, alkaline phosphatase, and total proteins for liver health.", "status": "active"},
         {"id": CAT_IDS["kidney"], "category_name": "Kidney Function Test", "category_image": "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?q=80&w=400&h=400&auto=format&fit=crop", "description": "Serum creatinine, blood urea nitrogen, uric acid, and electrolyte panel.", "status": "active"},
@@ -63,21 +63,28 @@ SEED_DIAGNOSTIC_DATA = {
         {"id": CAT_IDS["cancer"], "category_name": "Cancer Screening", "category_image": "https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=400&h=400&auto=format&fit=crop", "description": "Tumor markers including CEA, CA-125, PSA, and AFP for early detection.", "status": "active"}
     ],
     "laboratory_tests": [
-        {"id": "lab-101", "category_id": CAT_IDS["full_body"], "hospital_id": HOSPITAL_IDS["main"], "test_name": "Complete Blood Count (CBC)", "test_code": "LAB-CBC-01", "description": "24 parameters including Hb, RBC, WBC, Platelets, ESR.", "preparation": "No special preparation required.", "fasting_required": False, "sample_type": "Blood", "report_time": "12 Hours", "original_price": 40.0, "discount_price": 25.0, "home_collection": True, "status": "active"},
-        {"id": "lab-102", "category_id": CAT_IDS["diabetes"], "hospital_id": HOSPITAL_IDS["main"], "test_name": "HbA1c Glycated Hemoglobin", "test_code": "LAB-HBA1C-02", "description": "3-month average blood glucose control measurement.", "preparation": "Fast for 8 hours for best accuracy.", "fasting_required": True, "sample_type": "Blood", "report_time": "12 Hours", "original_price": 45.0, "discount_price": 30.0, "home_collection": True, "status": "active"},
-        {"id": "lab-103", "category_id": CAT_IDS["cardiac"], "hospital_id": HOSPITAL_IDS["main"], "test_name": "Lipid Profile Gold", "test_code": "LAB-LIPID-03", "description": "Total Cholesterol, HDL, LDL, VLDL, Triglycerides & Ratio.", "preparation": "10-12 hours mandatory overnight fasting.", "fasting_required": True, "sample_type": "Blood", "report_time": "24 Hours", "original_price": 75.0, "discount_price": 50.0, "home_collection": True, "status": "active"},
-        {"id": "lab-104", "category_id": CAT_IDS["thyroid"], "hospital_id": HOSPITAL_IDS["eastside"], "test_name": "Thyroid Stimulating Hormone (TSH)", "test_code": "LAB-TSH-04", "description": "Evaluates thyroid gland activity and metabolic regulation.", "preparation": "Early morning sample recommended.", "fasting_required": False, "sample_type": "Blood", "report_time": "24 Hours", "original_price": 35.0, "discount_price": 22.0, "home_collection": True, "status": "active"},
-        {"id": "lab-105", "category_id": CAT_IDS["vitamin"], "hospital_id": HOSPITAL_IDS["main"], "test_name": "Vitamin D3 (25-OH)", "test_code": "LAB-VITD-05", "description": "Assesses bone health, immune strength, and calciferol levels.", "preparation": "No special preparation.", "fasting_required": False, "sample_type": "Blood", "report_time": "24 Hours", "original_price": 60.0, "discount_price": 40.0, "home_collection": True, "status": "active"}
+        {"id": "d1111111-1111-4111-d111-111111111101", "category_id": CAT_IDS["full_body"], "hospital_id": HOSPITAL_IDS["main"], "test_name": "Complete Blood Count (CBC)", "test_code": "LAB-CBC-01", "description": "24 parameters including Hb, RBC, WBC, Platelets, ESR.", "preparation": "No special preparation required.", "fasting_required": False, "sample_type": "Blood", "report_time": "12 Hours", "original_price": 40.0, "discount_price": 25.0, "home_collection": True, "status": "active"},
+        {"id": "d2222222-2222-4222-d222-222222222102", "category_id": CAT_IDS["diabetes"], "hospital_id": HOSPITAL_IDS["main"], "test_name": "HbA1c Glycated Hemoglobin", "test_code": "LAB-HBA1C-02", "description": "3-month average blood glucose control measurement.", "preparation": "Fast for 8 hours for best accuracy.", "fasting_required": True, "sample_type": "Blood", "report_time": "12 Hours", "original_price": 45.0, "discount_price": 30.0, "home_collection": True, "status": "active"},
+        {"id": "d3333333-3333-4333-d333-333333333103", "category_id": CAT_IDS["cardiac"], "hospital_id": HOSPITAL_IDS["main"], "test_name": "Lipid Profile Gold", "test_code": "LAB-LIPID-03", "description": "Total Cholesterol, HDL, LDL, VLDL, Triglycerides & Ratio.", "preparation": "10-12 hours mandatory overnight fasting.", "fasting_required": True, "sample_type": "Blood", "report_time": "24 Hours", "original_price": 75.0, "discount_price": 50.0, "home_collection": True, "status": "active"},
+        {"id": "d4444444-4444-4444-d444-444444444104", "category_id": CAT_IDS["thyroid"], "hospital_id": HOSPITAL_IDS["eastside"], "test_name": "Thyroid Stimulating Hormone (TSH)", "test_code": "LAB-TSH-04", "description": "Evaluates thyroid gland activity and metabolic regulation.", "preparation": "Early morning sample recommended.", "fasting_required": False, "sample_type": "Blood", "report_time": "24 Hours", "original_price": 35.0, "discount_price": 22.0, "home_collection": True, "status": "active"},
+        {"id": "d5555555-5555-4555-d555-555555555105", "category_id": CAT_IDS["vitamin"], "hospital_id": HOSPITAL_IDS["main"], "test_name": "Vitamin D3 (25-OH)", "test_code": "LAB-VITD-05", "description": "Assesses bone health, immune strength, and calciferol levels.", "preparation": "No special preparation.", "fasting_required": False, "sample_type": "Blood", "report_time": "24 Hours", "original_price": 60.0, "discount_price": 40.0, "home_collection": True, "status": "active"}
+    ],
+    "diagnostic_tests": [
+        {"id": "d1111111-1111-4111-d111-111111111101", "hospital_id": HOSPITAL_IDS["main"], "test_name": "Complete Blood Count (CBC)", "category": "Full Body Checkup", "description": "24 parameters including Hb, RBC, WBC, Platelets, ESR.", "preparation": "No special preparation required.", "fasting_required": False, "report_time": "12 Hours", "original_price": 40.0, "discount_price": 25.0, "home_collection": True, "status": "active"},
+        {"id": "d2222222-2222-4222-d222-222222222102", "hospital_id": HOSPITAL_IDS["main"], "test_name": "HbA1c Glycated Hemoglobin", "category": "Diabetes Profile", "description": "3-month average blood glucose control measurement.", "preparation": "Fast for 8 hours for best accuracy.", "fasting_required": True, "report_time": "12 Hours", "original_price": 45.0, "discount_price": 30.0, "home_collection": True, "status": "active"},
+        {"id": "d3333333-3333-4333-d333-333333333103", "hospital_id": HOSPITAL_IDS["main"], "test_name": "Lipid Profile Gold", "category": "Cardiac Profile", "description": "Total Cholesterol, HDL, LDL, VLDL, Triglycerides & Ratio.", "preparation": "10-12 hours mandatory overnight fasting.", "fasting_required": True, "report_time": "24 Hours", "original_price": 75.0, "discount_price": 50.0, "home_collection": True, "status": "active"},
+        {"id": "d4444444-4444-4444-d444-444444444104", "hospital_id": HOSPITAL_IDS["eastside"], "test_name": "Thyroid Stimulating Hormone (TSH)", "category": "Thyroid Profile", "description": "Evaluates thyroid gland activity and metabolic regulation.", "preparation": "Early morning sample recommended.", "fasting_required": False, "report_time": "24 Hours", "original_price": 35.0, "discount_price": 22.0, "home_collection": True, "status": "active"},
+        {"id": "d5555555-5555-4555-d555-555555555105", "hospital_id": HOSPITAL_IDS["main"], "test_name": "Vitamin D3 (25-OH)", "category": "Vitamin Profile", "description": "Assesses bone health, immune strength, and calciferol levels.", "preparation": "No special preparation.", "fasting_required": False, "report_time": "24 Hours", "original_price": 60.0, "discount_price": 40.0, "home_collection": True, "status": "active"}
     ],
     "diagnostic_packages": [
         {
-            "id": "pkg-2001",
+            "id": "e1111111-1111-4111-e111-111111112001",
             "category_id": CAT_IDS["full_body"],
             "hospital_id": HOSPITAL_IDS["main"],
-            "package_name": "Executive Full Body Master Health Checkup",
+            "package_name": "Executive Comprehensive Wellness Profile",
             "package_code": "PKG-EXEC-FULL-01",
             "package_image": "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=600&h=400&auto=format&fit=crop",
-            "description": "Comprehensive 75+ parameter health evaluation including CBC, Lipid Profile, Liver & Kidney Function, HbA1c, Thyroid, and Vitamin D3 & B12.",
+            "description": "Comprehensive 75+ parameter health evaluation including metabolic profiles, vital organ screens, thyroid panels, and essential vitamin markers.",
             "original_price": 299.0,
             "discount_price": 149.0,
             "report_time": "24-36 Hours",
@@ -86,10 +93,10 @@ SEED_DIAGNOSTIC_DATA = {
             "status": "active"
         },
         {
-            "id": "pkg-2002",
+            "id": "e2222222-2222-4222-e222-222222222002",
             "category_id": CAT_IDS["diabetes"],
             "hospital_id": HOSPITAL_IDS["main"],
-            "package_name": "Comprehensive Diabetes Care & Organ Shield",
+            "package_name": "Diabetes Metabolic Assessment Panel",
             "package_code": "PKG-DIAB-CARE-02",
             "package_image": "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=600&h=400&auto=format&fit=crop",
             "description": "Advanced diabetic monitoring: HbA1c, Fasting & Post-prandial glucose, Serum Creatinine, Urine Microalbumin, and Lipid Profile.",
@@ -101,10 +108,10 @@ SEED_DIAGNOSTIC_DATA = {
             "status": "active"
         },
         {
-            "id": "pkg-2003",
+            "id": "e3333333-3333-4333-e333-333333332003",
             "category_id": CAT_IDS["cardiac"],
             "hospital_id": HOSPITAL_IDS["eastside"],
-            "package_name": "Advanced Cardiac Shield & Lipid Wellness",
+            "package_name": "Advanced Cardiovascular Wellness Shield",
             "package_code": "PKG-CARD-SHIELD-03",
             "package_image": "https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?q=80&w=600&h=400&auto=format&fit=crop",
             "description": "Includes Lipid Gold Profile, High-sensitivity CRP, Apolipoprotein A1 & B, Homocysteine, and ECG screening.",
@@ -116,10 +123,10 @@ SEED_DIAGNOSTIC_DATA = {
             "status": "active"
         },
         {
-            "id": "pkg-2004",
+            "id": "e4444444-4444-4444-e444-444444442004",
             "category_id": CAT_IDS["women"],
             "hospital_id": HOSPITAL_IDS["eastside"],
-            "package_name": "Women's Total Wellness & Hormonal Profile",
+            "package_name": "Women's Comprehensive Health Panel",
             "package_code": "PKG-WOMEN-WELL-04",
             "package_image": "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=600&h=400&auto=format&fit=crop", "description": "Tailored for women: Thyroid Profile Total, Iron & Ferritin, Calcium & Vitamin D3, LH, FSH, Prolactin, and CBC.",
             "original_price": 220.0,
@@ -130,10 +137,10 @@ SEED_DIAGNOSTIC_DATA = {
             "status": "active"
         },
         {
-            "id": "pkg-2005",
+            "id": "e5555555-5555-4555-e555-555555552005",
             "category_id": CAT_IDS["senior"],
             "hospital_id": HOSPITAL_IDS["metro"],
-            "package_name": "Senior Citizen Vital Care Package",
+            "package_name": "Senior Citizen Wellness Panel",
             "package_code": "PKG-SENIOR-CARE-05",
             "package_image": "https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=600&h=400&auto=format&fit=crop",
             "description": "Geriatric wellness package including Joint & Bone markers, Kidney Function (KFT), Liver Function (LFT), Complete Blood Count, and Cardiac markers.",
@@ -146,28 +153,28 @@ SEED_DIAGNOSTIC_DATA = {
         }
     ],
     "package_tests": [
-        {"id": "c1111111-1111-4111-c111-111111111111", "package_id": "pkg-2001", "test_id": "lab-101"},
-        {"id": "c2222222-2222-4222-c222-222222222222", "package_id": "pkg-2001", "test_id": "lab-102"},
-        {"id": "c3333333-3333-4333-c333-333333333333", "package_id": "pkg-2001", "test_id": "lab-103"},
-        {"id": "c4444444-4444-4444-c444-444444444444", "package_id": "pkg-2001", "test_id": "lab-104"},
-        {"id": "c5555555-5555-4555-c555-555555555555", "package_id": "pkg-2001", "test_id": "lab-105"},
-        {"id": "c6666666-6666-4666-c666-666666666666", "package_id": "pkg-2002", "test_id": "lab-101"},
-        {"id": "c7777777-7777-4777-c777-777777777777", "package_id": "pkg-2002", "test_id": "lab-102"},
-        {"id": "c8888888-8888-4888-c888-888888888888", "package_id": "pkg-2003", "test_id": "lab-103"}
+        {"id": "c1111111-1111-4111-c111-111111111111", "package_id": "e1111111-1111-4111-e111-111111112001", "test_id": "d1111111-1111-4111-d111-111111111101"},
+        {"id": "c2222222-2222-4222-c222-222222222222", "package_id": "e1111111-1111-4111-e111-111111112001", "test_id": "d2222222-2222-4222-d222-222222222102"},
+        {"id": "c3333333-3333-4333-c333-333333333333", "package_id": "e1111111-1111-4111-e111-111111112001", "test_id": "d3333333-3333-4333-d333-333333333103"},
+        {"id": "c4444444-4444-4444-c444-444444444444", "package_id": "e1111111-1111-4111-e111-111111112001", "test_id": "d4444444-4444-4444-d444-444444444104"},
+        {"id": "c5555555-5555-4555-c555-555555555555", "package_id": "e1111111-1111-4111-e111-111111112001", "test_id": "d5555555-5555-4555-d555-555555555105"},
+        {"id": "c6666666-6666-4666-c666-666666666666", "package_id": "e2222222-2222-4222-e222-222222222002", "test_id": "d1111111-1111-4111-d111-111111111101"},
+        {"id": "c7777777-7777-4777-c777-777777777777", "package_id": "e2222222-2222-4222-e222-222222222002", "test_id": "d2222222-2222-4222-d222-222222222102"},
+        {"id": "c8888888-8888-4888-c888-888888888888", "package_id": "e3333333-3333-4333-e333-333333332003", "test_id": "d3333333-3333-4333-d333-333333333103"}
     ],
     "sample_collection_slots": [
-        {"id": "slot-1", "hospital_id": HOSPITAL_IDS["main"], "slot_date": "2026-08-04", "start_time": "07:00:00", "end_time": "09:00:00", "max_bookings": 10, "available_slots": 8, "status": "active"},
-        {"id": "slot-2", "hospital_id": HOSPITAL_IDS["main"], "slot_date": "2026-08-04", "start_time": "09:00:00", "end_time": "11:00:00", "max_bookings": 10, "available_slots": 6, "status": "active"},
-        {"id": "slot-3", "hospital_id": HOSPITAL_IDS["main"], "slot_date": "2026-08-04", "start_time": "11:00:00", "end_time": "13:00:00", "max_bookings": 10, "available_slots": 10, "status": "active"},
-        {"id": "slot-4", "hospital_id": HOSPITAL_IDS["eastside"], "slot_date": "2026-08-04", "start_time": "08:00:00", "end_time": "10:00:00", "max_bookings": 10, "available_slots": 9, "status": "active"}
+        {"id": "f1111111-1111-4111-f111-111111111111", "hospital_id": HOSPITAL_IDS["main"], "slot_date": "2026-08-04", "start_time": "07:00:00", "end_time": "09:00:00", "max_bookings": 10, "available_slots": 8, "status": "active"},
+        {"id": "f2222222-2222-4222-f222-222222222222", "hospital_id": HOSPITAL_IDS["main"], "slot_date": "2026-08-04", "start_time": "09:00:00", "end_time": "11:00:00", "max_bookings": 10, "available_slots": 6, "status": "active"},
+        {"id": "f3333333-3333-4333-f333-333333333333", "hospital_id": HOSPITAL_IDS["main"], "slot_date": "2026-08-04", "start_time": "11:00:00", "end_time": "13:00:00", "max_bookings": 10, "available_slots": 10, "status": "active"},
+        {"id": "f4444444-4444-4444-f444-444444444444", "hospital_id": HOSPITAL_IDS["eastside"], "slot_date": "2026-08-04", "start_time": "08:00:00", "end_time": "10:00:00", "max_bookings": 10, "available_slots": 9, "status": "active"}
     ],
     "package_bookings": [
         {
-            "id": "book-3001",
+            "id": "a3333333-3333-4333-a333-333333333001",
             "user_id": "00000000-0000-0000-0000-000000000001",
             "patient_name": "Percy Boyina",
             "hospital_id": HOSPITAL_IDS["main"],
-            "package_id": "pkg-2001",
+            "package_id": "e1111111-1111-4111-e111-111111112001",
             "booking_reference": "PKG-2026-9901",
             "appointment_date": "2026-08-04",
             "appointment_time": "07:00:00 - 09:00:00",
@@ -182,6 +189,11 @@ SEED_DIAGNOSTIC_DATA = {
 
 
 def seed_diagnostic_all():
+    print("Seed disabled: data is managed manually via the admin dashboard. Skipping auto-seed.")
+    return {}
+
+def _seed_diagnostic_all_internal():
+    """Internal seed function - only call this explicitly during initial setup."""
     print("Beginning Diagnostic Packages Module Data Seeding...")
     if not supabase_client:
         print("Warning: Supabase client is not available. Returning local seed dictionary.")
@@ -191,7 +203,7 @@ def seed_diagnostic_all():
         try:
             print(f"Upserting {len(records)} records into table '{table_name}'...")
             supabase_client.table(table_name).upsert(records).execute()
-            print(f"✓ Table '{table_name}' seeded successfully.")
+            print(f"[OK] Table '{table_name}' seeded successfully.")
         except Exception as e:
             print(f"Note/Error seeding '{table_name}': {e}")
 

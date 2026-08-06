@@ -8,6 +8,7 @@ import { hospitalService } from '../lib/hospitalService';
 const HospitalDirectory = () => {
   const [hospitals, setHospitals] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [hasHospitals, setHasHospitals] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedCity, setSelectedCity] = useState('All Cities');
   const [selectedDepartment, setSelectedDepartment] = useState('All Departments');
@@ -15,7 +16,7 @@ const HospitalDirectory = () => {
   const [onlyOpen, setOnlyOpen] = useState(false);
 
   const [options, setOptions] = useState({
-    cities: ['Citywest', 'Eastside', 'Metro City', 'Northland'],
+    cities: ['Hyderabad'],
     departments: ['Cardiology', 'Neurology', 'Orthopedics', 'Pediatrics', 'General Medicine', 'Gynecology'],
     ratings: [4.5, 4.0, 3.5]
   });
@@ -41,6 +42,11 @@ const HospitalDirectory = () => {
         isOpen: onlyOpen ? true : null
       });
       setHospitals(data || []);
+      
+      // Check if database itself is completely empty
+      if (search === '' && selectedCity === 'All Cities' && selectedDepartment === 'All Departments' && !selectedMinRating && !onlyOpen) {
+        setHasHospitals((data || []).length > 0);
+      }
     } catch (err) {
       console.error('Failed to load hospitals:', err);
       setHospitals([]);
@@ -80,11 +86,11 @@ const HospitalDirectory = () => {
             </div>
 
             <h1 className="font-headline text-4xl md:text-6xl font-black tracking-tight mb-4 leading-tight">
-              Hospital <span className="bg-gradient-to-r from-blue-400 to-blue-200 text-transparent bg-clip-text">Campuses & Centers</span>
+              Specialty <span className="bg-gradient-to-r from-blue-400 to-blue-200 text-transparent bg-clip-text">Medical Facilities</span>
             </h1>
 
             <p className="text-slate-300 text-base md:text-lg max-w-2xl font-medium leading-relaxed">
-              Explore premier super-specialty hospitals, emergency centers, and diagnostic facilities. Filter dynamically by city, department, or 24/7 availability.
+              Explore our state-of-the-art medical complexes, emergency trauma centers, and diagnostic institutes.
             </p>
           </div>
         </section>
@@ -223,6 +229,16 @@ const HospitalDirectory = () => {
                   <div className="h-10 bg-slate-200 rounded-xl" />
                 </div>
               ))}
+            </div>
+          ) : !hasHospitals ? (
+            <div className="bg-white rounded-3xl p-16 text-center border border-slate-200 max-w-xl mx-auto shadow-sm">
+              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
+                <Building2 className="w-8 h-8" />
+              </div>
+              <h3 className="font-headline text-xl font-bold text-slate-900 mb-2">No Hospitals Available</h3>
+              <p className="text-xs text-slate-500 font-medium">
+                Please check back later or contact hospital network support.
+              </p>
             </div>
           ) : hospitals.length === 0 ? (
             /* Empty State */

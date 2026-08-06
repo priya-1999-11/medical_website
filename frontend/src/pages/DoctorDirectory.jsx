@@ -162,12 +162,12 @@ const DoctorDirectory = () => {
             </span>
 
             <h1 className="font-headline text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-              Find the Right Doctor <br />
-              <span className="bg-gradient-to-r from-blue-700 to-blue-500 text-transparent bg-clip-text italic">For Your Health</span>
+              Clinical Specialist Directory <br />
+              <span className="bg-gradient-to-r from-blue-700 to-blue-500 text-transparent bg-clip-text italic">Dedicated to Outcomes</span>
             </h1>
 
             <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium">
-              Connect with experienced and trusted specialists who provide the best clinical care.
+              Consult with board-certified physicians, surgeon leaders, and patient care advocates who listen first.
             </p>
           </div>
 
@@ -341,8 +341,8 @@ const DoctorDirectory = () => {
 
             {/* Green Care Expert Banner Card */}
             <div className="p-5 bg-gradient-to-br from-blue-700 to-blue-900 rounded-2xl text-white space-y-3">
-              <h4 className="font-bold text-xs uppercase tracking-wider">Can't find the right doctor?</h4>
-              <p className="text-[11px] opacity-90 leading-relaxed">Our care experts are here to help you 24/7.</p>
+              <h4 className="font-bold text-xs uppercase tracking-wider">Need help selecting a specialist?</h4>
+              <p className="text-[11px] opacity-90 leading-relaxed">Our advisory desks are available 24/7 to guide your choice.</p>
               <button 
                 type="button"
                 onClick={() => alert('helpline: +1 (800) SERENITY')}

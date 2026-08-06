@@ -34,6 +34,7 @@ const AdminHospitals = () => {
     address: '',
     phone: '',
     email: '',
+    website: '',
     rating: 4.8,
     is_open: true,
     status: 'active',
@@ -77,6 +78,7 @@ const AdminHospitals = () => {
         address: hospital.address || '',
         phone: hospital.phone || '',
         email: hospital.email || '',
+        website: hospital.website || '',
         rating: hospital.rating || 4.8,
         is_open: hospital.is_open ?? true,
         status: hospital.status || 'active',
@@ -94,6 +96,7 @@ const AdminHospitals = () => {
         address: '',
         phone: '',
         email: '',
+        website: '',
         rating: 4.8,
         is_open: true,
         status: 'active',
@@ -183,6 +186,7 @@ const AdminHospitals = () => {
         address: formData.address.trim(),
         phone: formData.phone.trim(),
         email: formData.email.trim(),
+        website: formData.website.trim(),
         rating: parseFloat(formData.rating) || 4.8,
         is_open: formData.is_open,
         status: formData.status,
@@ -409,7 +413,7 @@ const AdminHospitals = () => {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Clinical Serenity Super Specialty Hospital"
+                    placeholder="e.g. Prana Main Medical Center"
                     value={formData.hospital_name}
                     onChange={(e) => setFormData({ ...formData, hospital_name: e.target.value })}
                     className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-600 outline-none"
@@ -435,6 +439,17 @@ const AdminHospitals = () => {
                     placeholder="+1 (800) SERENITY"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-600 outline-none"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-bold text-slate-700 uppercase">Official Website URL</label>
+                  <input
+                    type="url"
+                    placeholder="https://example.com"
+                    value={formData.website}
+                    onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                     className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-600 outline-none"
                   />
                 </div>

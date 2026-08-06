@@ -55,9 +55,27 @@ export const packageService = {
       if (categoryId && categoryId !== 'All') query = query.eq('category_id', categoryId);
       if (hospitalId && hospitalId !== 'All') query = query.eq('hospital_id', hospitalId);
 
-      const { data, error } = await query;
+      const [pRes, ptRes] = await Promise.all([
+        query,
+        supabase.from('package_tests').select('package_id')
+      ]);
+
+      const { data, error } = pRes;
+      const { data: ptData } = ptRes;
+
+      const counts = {};
+      if (ptData) {
+        ptData.forEach(pt => {
+          counts[pt.package_id] = (counts[pt.package_id] || 0) + 1;
+        });
+      }
+
       if (!error && data) {
-        let results = data;
+        let results = data.map(p => ({
+          ...p,
+          price: p.discount_price ?? p.price ?? 0,
+          total_tests: counts[p.id] || 0
+        }));
         if (search) {
           const s = search.toLowerCase();
           results = results.filter(p =>
@@ -80,7 +98,11 @@ export const packageService = {
     try {
       const res = await fetch(`${BACKEND_URL}/api/diagnostic/packages/${packageId}`);
       if (res.ok) {
-        return await res.json();
+        const pkg = await res.json();
+        return {
+          ...pkg,
+          price: pkg.discount_price ?? pkg.price ?? 0
+        };
       }
     } catch (e) {
       console.warn(`Backend query for package ${packageId} failed:`, e);
@@ -88,11 +110,47 @@ export const packageService = {
 
     try {
       const { data: pkg } = await supabase.from('diagnostic_packages').select('*').eq('id', packageId).single();
-      if (pkg) return pkg;
+      if (pkg) {
+        const { count } = await supabase
+          .from('package_tests')
+          .select('*', { count: 'exact', head: true })
+          .eq('package_id', packageId);
+
+        return {
+          ...pkg,
+          price: pkg.discount_price ?? pkg.price ?? 0,
+          total_tests: count || 0
+        };
+      }
     } catch (err) {
       console.error('Error fetching package detail:', err);
     }
     return null;
+  },
+
+  /**
+   * Fetch all tests associated with a package
+   */
+  async getPackageTests(packageId) {
+    try {
+      const { data: junctions, error: jError } = await supabase
+        .from('package_tests')
+        .select('test_id')
+        .eq('package_id', packageId);
+      if (jError) throw jError;
+      if (!junctions || junctions.length === 0) return [];
+      
+      const testIds = junctions.map(j => j.test_id);
+      const { data: tests, error: tError } = await supabase
+        .from('diagnostic_tests')
+        .select('*')
+        .in('id', testIds);
+      if (tError) throw tError;
+      return tests || [];
+    } catch (err) {
+      console.error('Error fetching package tests:', err);
+      return [];
+    }
   },
 
   /**

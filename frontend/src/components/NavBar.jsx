@@ -69,22 +69,7 @@ const NavBar = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <Link 
-                to="/book-appointment" 
-                className="flex items-center gap-1.5 text-green-300 hover:text-white font-bold tracking-wide transition-colors"
-              >
-                <ShieldAlert className="w-3.5 h-3.5 animate-pulse text-green-300" />
-                <span>Emergency Room & Urgent Care</span>
-              </Link>
-              <span className="text-blue-300">|</span>
-              <Link 
-                to="/admin" 
-                className="text-blue-100 hover:text-white transition-colors font-medium text-[11px]"
-              >
-                Staff Portal
-              </Link>
-            </div>
+
           </div>
         </div>
 
@@ -97,13 +82,15 @@ const NavBar = () => {
           <div className="max-w-7xl mx-auto flex justify-between items-center px-6 md:px-12 h-full">
             
             {/* Brand Logo */}
-            <Link to="/" className="flex items-center gap-2.5 group">
-              <img
-                src="/prana_logo.png"
-                alt="PRANA Healthcare Services"
-                className="h-10 md:h-12 w-auto object-contain transition-transform group-hover:scale-105"
-              />
-            </Link>
+            <div className="md:flex-1 flex md:justify-start">
+              <Link to="/" className="flex items-center gap-2.5 group">
+                <img
+                  src="/prana_logo.png"
+                  alt="PRANA Healthcare Services"
+                  className="h-12 md:h-16 w-auto object-contain transition-transform group-hover:scale-105"
+                />
+              </Link>
+            </div>
 
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center gap-8 h-full">
@@ -112,7 +99,7 @@ const NavBar = () => {
                 className={`font-semibold text-sm transition-all relative py-2 ${
                   isActive('/') 
                     ? 'text-[#275B99] font-bold' 
-                    : 'text-slate-600 hover:text-[#275B99]'
+                    : 'text-[#111827] hover:text-[#275B99]'
                 }`}
               >
                 <span>Home</span>
@@ -126,7 +113,7 @@ const NavBar = () => {
                 className={`font-semibold text-sm transition-all relative py-2 ${
                   isActive('/doctors') 
                     ? 'text-[#275B99] font-bold' 
-                    : 'text-slate-600 hover:text-[#275B99]'
+                    : 'text-[#111827] hover:text-[#275B99]'
                 }`}
               >
                 <span>Doctors</span>
@@ -140,7 +127,7 @@ const NavBar = () => {
                 className={`font-semibold text-sm transition-all relative py-2 ${
                   isActive('/hospitals') || location.pathname.startsWith('/hospitals')
                     ? 'text-[#275B99] font-bold' 
-                    : 'text-slate-600 hover:text-[#275B99]'
+                    : 'text-[#111827] hover:text-[#275B99]'
                 }`}
               >
                 <span>Hospitals</span>
@@ -154,7 +141,7 @@ const NavBar = () => {
                 className={`font-semibold text-sm transition-all relative py-2 ${
                   isActive('/insurance') || location.pathname.startsWith('/insurance')
                     ? 'text-[#275B99] font-bold' 
-                    : 'text-slate-600 hover:text-[#275B99]'
+                    : 'text-[#111827] hover:text-[#275B99]'
                 }`}
               >
                 <span>Insurance</span>
@@ -168,7 +155,7 @@ const NavBar = () => {
                 className={`font-semibold text-sm transition-all relative py-2 ${
                   isActive('/packages') || location.pathname.startsWith('/packages')
                     ? 'text-[#275B99] font-bold' 
-                    : 'text-slate-600 hover:text-[#275B99]'
+                    : 'text-[#111827] hover:text-[#275B99]'
                 }`}
               >
                 <span>Packages</span>
@@ -183,7 +170,7 @@ const NavBar = () => {
                 onMouseEnter={() => setIsDropdownOpen(true)}
                 onMouseLeave={() => setIsDropdownOpen(false)}
               >
-                <button className="flex items-center gap-1.5 text-slate-600 group-hover:text-[#275B99] font-semibold text-sm transition-colors h-full">
+                <button className="flex items-center gap-1.5 text-[#111827] group-hover:text-[#275B99] font-semibold text-sm transition-colors h-full">
                   <span>Services</span>
                   <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180 text-[#275B99]' : ''}`} />
                 </button>
@@ -244,7 +231,7 @@ const NavBar = () => {
                 className={`font-semibold text-sm transition-all relative py-2 ${
                   isActive('/about') 
                     ? 'text-[#275B99] font-bold' 
-                    : 'text-slate-600 hover:text-[#275B99]'
+                    : 'text-[#111827] hover:text-[#275B99]'
                 }`}
               >
                 <span>About</span>
@@ -258,7 +245,7 @@ const NavBar = () => {
                 className={`font-semibold text-sm transition-all relative py-2 ${
                   isActive('/book-appointment') 
                     ? 'text-[#275B99] font-bold' 
-                    : 'text-slate-600 hover:text-[#275B99]'
+                    : 'text-[#111827] hover:text-[#275B99]'
                 }`}
               >
                 <span>Book Appointment</span>
@@ -269,14 +256,16 @@ const NavBar = () => {
             </div>
 
             {/* Right Action & Mobile Toggle */}
-            <div className="flex items-center gap-3">
-              <button 
-                onClick={() => navigate(user ? '/patient-dashboard' : '/patient-login')}
-                className="bg-[#275B99] hover:bg-[#1F4B80] text-white px-5 py-2.5 rounded-2xl font-bold text-xs transition-all shadow-sm hover:shadow-md active:scale-95 flex items-center gap-2"
-              >
-                <User className="w-3.5 h-3.5 text-white" />
-                <span>{user ? 'Dashboard' : 'Book Consultation'}</span>
-              </button>
+            <div className="md:flex-1 flex justify-end items-center gap-3">
+              {!user && (
+                <button 
+                  onClick={() => navigate('/patient-login')}
+                  className="bg-[#275B99] hover:bg-[#1F4B80] text-white px-5 py-2.5 rounded-2xl font-bold text-xs transition-all shadow-sm hover:shadow-md active:scale-95 flex items-center gap-2"
+                >
+                  <User className="w-3.5 h-3.5 text-white" />
+                  <span>Book Consultation</span>
+                </button>
+              )}
 
               {/* Mobile Hamburger Menu Toggle */}
               <button

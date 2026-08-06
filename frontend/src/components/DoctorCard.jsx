@@ -86,7 +86,7 @@ const DoctorCard = ({ doctor }) => {
               </strong>
               {' '}• MBBS, MS, MD ({doctor.department || doctor.specialty || 'General Care'})
             </p>
-            <p className="text-slate-600">Clinical Serenity Main Hospital, Medical District</p>
+            <p className="text-slate-600">Prana Main Medical Center, Medical District</p>
           </div>
 
           {/* Specialty Treatment Tags */}

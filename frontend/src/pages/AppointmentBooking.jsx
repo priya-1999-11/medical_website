@@ -236,7 +236,7 @@ Doctor: ${selectedDoctor.name}
 Department: ${formData.department}
 Date: ${formData.appointmentDate}
 Time: ${formData.appointmentTime}
-Hospital: Clinical Serenity`;
+Hospital: Prana Health Network`;
         
         const whatsappUrl = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(whatsappMessage)}`;
         window.open(whatsappUrl, '_blank');

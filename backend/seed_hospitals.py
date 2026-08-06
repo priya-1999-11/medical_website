@@ -34,18 +34,18 @@ SEED_DATA = {
     "hospitals": [
         {
             "id": HOSPITAL_IDS["main"],
-            "hospital_name": "Clinical Serenity Main Campus",
+            "hospital_name": "Prana Main Medical Center",
             "hospital_code": "CS-MAIN-001",
             "logo_url": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=200&h=200&auto=format&fit=crop",
             "banner_url": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1200&h=400&auto=format&fit=crop",
-            "description": "State-of-the-art super-specialty tertiary care hospital with 500+ beds, level 1 trauma center, and advanced robotic surgery suite.",
+            "description": "Our primary tertiary care center featuring 500+ beds, advanced robotic surgical systems, and specialized departments.",
             "address": "123 Clinical Ave, Medical District",
             "city": "Citywest",
             "state": "California",
             "pincode": "50210",
             "phone": "+1 (800) 555-0199",
-            "email": "main.campus@clinicalserenity.com",
-            "website": "https://clinicalserenity.com",
+            "email": "main.campus@pranahealthnetwork.com",
+            "website": "https://pranahealthnetwork.com",
             "latitude": 37.7749,
             "longitude": -122.4194,
             "rating": 4.9,
@@ -57,18 +57,18 @@ SEED_DATA = {
         },
         {
             "id": HOSPITAL_IDS["eastside"],
-            "hospital_name": "Serenity Eastside Specialty Center",
+            "hospital_name": "Prana Eastside Care Center",
             "hospital_code": "CS-EAST-002",
             "logo_url": "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?q=80&w=200&h=200&auto=format&fit=crop",
             "banner_url": "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?q=80&w=1200&h=400&auto=format&fit=crop",
-            "description": "Specialized cardiac, orthopedic, and wellness institute featuring luxury patient suites and comprehensive diagnostic labs.",
+            "description": "Specialized orthopedic, obstetric, and wellness facility delivering high-precision outpatient care.",
             "address": "456 Health Boulevard, Eastside Plaza",
             "city": "Eastside",
             "state": "California",
             "pincode": "50215",
             "phone": "+1 (800) 555-0244",
-            "email": "eastside@clinicalserenity.com",
-            "website": "https://eastside.clinicalserenity.com",
+            "email": "eastside@pranahealthnetwork.com",
+            "website": "https://eastside.pranahealthnetwork.com",
             "latitude": 37.7833,
             "longitude": -122.4167,
             "rating": 4.8,
@@ -80,18 +80,18 @@ SEED_DATA = {
         },
         {
             "id": HOSPITAL_IDS["metro"],
-            "hospital_name": "Serenity Metro Heart & Trauma Institute",
+            "hospital_name": "Prana Metro Specialty Institute",
             "hospital_code": "CS-METRO-003",
             "logo_url": "https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=200&h=200&auto=format&fit=crop",
             "banner_url": "https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=1200&h=400&auto=format&fit=crop",
-            "description": "Dedicated emergency trauma center, catheterization lab, stroke unit, and intensive cardiac care unit operating 24/7.",
+            "description": "An emergency-focused trauma hospital housing dynamic intensive care wings and immediate response teams.",
             "address": "789 Metro Expressway, Central Hub",
             "city": "Metro City",
             "state": "California",
             "pincode": "50220",
             "phone": "+1 (800) 555-0377",
-            "email": "metro@clinicalserenity.com",
-            "website": "https://metro.clinicalserenity.com",
+            "email": "metro@pranahealthnetwork.com",
+            "website": "https://metro.pranahealthnetwork.com",
             "latitude": 37.7690,
             "longitude": -122.4480,
             "rating": 4.7,
@@ -103,18 +103,18 @@ SEED_DATA = {
         },
         {
             "id": HOSPITAL_IDS["northland"],
-            "hospital_name": "Serenity Care General Hospital",
+            "hospital_name": "Prana Care General Hospital",
             "hospital_code": "CS-NORTH-004",
             "logo_url": "https://images.unsplash.com/photo-1538108149393-fbbd81895907?q=80&w=200&h=200&auto=format&fit=crop",
             "banner_url": "https://images.unsplash.com/photo-1538108149393-fbbd81895907?q=80&w=1200&h=400&auto=format&fit=crop",
-            "description": "Community-focused multispecialty hospital providing maternity, outpatient consultations, preventive health checks, and pediatric care.",
+            "description": "A community general hospital offering primary consults, family medicine, and outpatient diagnostics.",
             "address": "321 Northland Drive, Suburban Wing",
             "city": "Northland",
             "state": "California",
             "pincode": "50230",
             "phone": "+1 (800) 555-0488",
-            "email": "northland@clinicalserenity.com",
-            "website": "https://northland.clinicalserenity.com",
+            "email": "northland@pranahealthnetwork.com",
+            "website": "https://northland.pranahealthnetwork.com",
             "latitude": 37.7910,
             "longitude": -122.4050,
             "rating": 4.6,
@@ -126,16 +126,16 @@ SEED_DATA = {
         }
     ],
     "departments": [
-        {"id": "dept-101", "hospital_id": HOSPITAL_IDS["main"], "department_name": "Cardiology", "description": "Comprehensive cardiac diagnostics, interventional cardiology, and heart failure management.", "status": "active"},
-        {"id": "dept-102", "hospital_id": HOSPITAL_IDS["main"], "department_name": "Neurology", "description": "Advanced neuro-diagnostics, stroke intervention, and brain surgery.", "status": "active"},
-        {"id": "dept-103", "hospital_id": HOSPITAL_IDS["main"], "department_name": "Orthopedics", "description": "Joint replacement, spine surgery, and sports medicine clinic.", "status": "active"},
-        {"id": "dept-104", "hospital_id": HOSPITAL_IDS["main"], "department_name": "Pediatrics", "description": "Pediatric sub-specialties, NICU, and adolescent care.", "status": "active"},
-        {"id": "dept-105", "hospital_id": HOSPITAL_IDS["main"], "department_name": "General Medicine", "description": "Preventive health, chronic disease care, and diagnostic medicine.", "status": "active"},
-        {"id": "dept-201", "hospital_id": HOSPITAL_IDS["eastside"], "department_name": "Cardiology", "description": "Non-invasive cardiology and preventive cardiac screening.", "status": "active"},
-        {"id": "dept-202", "hospital_id": HOSPITAL_IDS["eastside"], "department_name": "Gynecology & Obstetrics", "description": "Maternity care, birthing suites, and gynecological oncology.", "status": "active"},
-        {"id": "dept-203", "hospital_id": HOSPITAL_IDS["eastside"], "department_name": "Oncology", "description": "Chemotherapy, radiation therapy, and surgical oncology.", "status": "active"},
-        {"id": "dept-301", "hospital_id": HOSPITAL_IDS["metro"], "department_name": "Emergency & Trauma", "description": "24/7 emergency resuscitation, trauma surgery, and critical care.", "status": "active"},
-        {"id": "dept-302", "hospital_id": HOSPITAL_IDS["metro"], "department_name": "Radiology & Imaging", "description": "3T MRI, 128-slice CT scan, Digital X-ray, and 4D Ultrasound.", "status": "active"}
+        {"id": "dept-101", "hospital_id": HOSPITAL_IDS["main"], "department_name": "Cardiology", "description": "Academic cardiovascular therapy, interventional surgery, and chronic condition management.", "status": "active"},
+        {"id": "dept-102", "hospital_id": HOSPITAL_IDS["main"], "department_name": "Neurology", "description": "Precision neuro-diagnostics, microsurgery, and translational brain science.", "status": "active"},
+        {"id": "dept-103", "hospital_id": HOSPITAL_IDS["main"], "department_name": "Orthopedics", "description": "Joint reconstruction, orthobiologics, and musculoskeletal trauma.", "status": "active"},
+        {"id": "dept-104", "hospital_id": HOSPITAL_IDS["main"], "department_name": "Pediatrics", "description": "Geriatric sub-specialties, neonatal intensive wings, and child medicine.", "status": "active"},
+        {"id": "dept-105", "hospital_id": HOSPITAL_IDS["main"], "department_name": "General Medicine", "description": "Proactive health screening, clinical audits, and internal medicine.", "status": "active"},
+        {"id": "dept-201", "hospital_id": HOSPITAL_IDS["eastside"], "department_name": "Cardiology", "description": "Non-invasive diagnostics and metabolic vascular screening.", "status": "active"},
+        {"id": "dept-202", "hospital_id": HOSPITAL_IDS["eastside"], "department_name": "Gynecology & Obstetrics", "description": "Obstetric management, private birthing units, and gynecological care.", "status": "active"},
+        {"id": "dept-203", "hospital_id": HOSPITAL_IDS["eastside"], "department_name": "Oncology", "description": "Precision chemotherapy, radiation oncology, and complex tumor resections.", "status": "active"},
+        {"id": "dept-301", "hospital_id": HOSPITAL_IDS["metro"], "department_name": "Emergency & Trauma", "description": "Level-1 emergency response, trauma surgical board, and critical care.", "status": "active"},
+        {"id": "dept-302", "hospital_id": HOSPITAL_IDS["metro"], "department_name": "Radiology & Imaging", "description": "3T magnetic resonance imaging, CT scanners, and diagnostic imaging.", "status": "active"}
     ],
     "doctors": [
         {
@@ -149,7 +149,7 @@ SEED_DATA = {
             "languages": ["English", "Spanish"],
             "consultation_fee": 150.0,
             "profile_image": "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=400&h=400&auto=format&fit=crop",
-            "about": "Dr. Sarah Jenkins is a renowned interventional cardiologist with over 15 years of clinical experience in managing coronary artery disease and heart rhythm disorders.",
+            "about": "Renowned interventional cardiologist with over 15 years of clinical experience managing coronary pathologies.",
             "status": "active"
         },
         {
@@ -163,7 +163,7 @@ SEED_DATA = {
             "languages": ["English", "Mandarin"],
             "consultation_fee": 180.0,
             "profile_image": "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=400&h=400&auto=format&fit=crop",
-            "about": "Dr. Michael Chen specializes in movement disorders, epilepsy treatment, and acute neuro-vascular interventions.",
+            "about": "Specializes in complex movement disorders, clinical epilepsy treatments, and acute stroke therapy.",
             "status": "active"
         },
         {
@@ -177,7 +177,7 @@ SEED_DATA = {
             "languages": ["English", "Hindi"],
             "consultation_fee": 120.0,
             "profile_image": "https://images.unsplash.com/photo-1594824813566-78a050f14652?q=80&w=400&h=400&auto=format&fit=crop",
-            "about": "Dr. Priya Patel is passionate about child nutrition, neonatal care, and preventive pediatric health.",
+            "about": "Passionate about child nutrition management, neonatal intensive care protocols, and family health planning.",
             "status": "active"
         },
         {
@@ -191,7 +191,7 @@ SEED_DATA = {
             "languages": ["English"],
             "consultation_fee": 160.0,
             "profile_image": "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=400&h=400&auto=format&fit=crop",
-            "about": "Dr. Robert Taylor has extensive expertise in complex trauma management, knee replacements, and arthroscopic procedures.",
+            "about": "Extensive clinical expertise in orthopedic trauma reconstruction, knee replacements, and minimally invasive surgeries.",
             "status": "active"
         }
     ],
@@ -325,7 +325,7 @@ SEED_DATA = {
             "hospital_id": HOSPITAL_IDS["main"],
             "user_id": "00000000-0000-0000-0000-000000000001",
             "rating": 5.0,
-            "review": "Exceptional care at Clinical Serenity Main Campus. The doctors, nurses, and trauma team responded immediately and provided world-class treatment during emergency care.",
+            "review": "Exceptional care at the main campus. The doctors, nurses, and trauma team responded immediately and provided outstanding treatment.",
             "created_at": "2026-07-20T10:30:00Z"
         },
         {
@@ -341,7 +341,7 @@ SEED_DATA = {
             "hospital_id": HOSPITAL_IDS["eastside"],
             "user_id": None,
             "rating": 5.0,
-            "review": "Serenity Eastside Specialty Center has top-notch doctors and courteous nursing staff. Highly recommended!",
+            "review": "This specialty facility has outstanding doctors and courteous nursing staff. Highly recommended!",
             "created_at": "2026-07-28T09:00:00Z"
         }
     ],
@@ -355,17 +355,78 @@ SEED_DATA = {
 }
 
 
+def to_uuid(id_str):
+    if not id_str:
+        return None
+    try:
+        uuid.UUID(id_str)
+        return id_str
+    except ValueError:
+        pass
+    return str(uuid.uuid5(uuid.NAMESPACE_DNS, id_str))
+
 def seed_all():
+    print("Seed disabled: data is managed manually via the admin dashboard. Skipping auto-seed.")
+    return {}
+
+def _seed_all_internal():
+    """Internal seed function - only call this explicitly during initial setup."""
     print("Beginning Hospital Wise Module Data Seeding...")
     if not supabase_client:
         print("Warning: Supabase client is not available. Skipping remote Supabase upsert.")
         return SEED_DATA
 
-    for table_name, records in SEED_DATA.items():
+    # Map tables/keys to correct supabase table name
+    table_mapping = {
+        "hospitals": "hospitals",
+        "departments": "hospital_departments",  # Correct target table
+        "doctors": "doctors",
+        "doctor_availability": "doctor_availability",
+        "diagnostic_tests": "diagnostic_tests",
+        "diagnostic_packages": "diagnostic_packages",
+        "package_tests": "package_tests",
+        "hospital_reviews": "hospital_reviews",
+        "hospital_images": "hospital_images"
+    }
+
+    for key, records in SEED_DATA.items():
+        table_name = table_mapping.get(key, key)
+        
+        # Pre-process IDs and Foreign Keys to valid UUID formats
+        mapped_records = []
+        for r in records:
+            item = r.copy()
+            if table_name == "doctors":
+                if "doctor_name" in item:
+                    item["name"] = item.pop("doctor_name")
+                if "qualification" in item:
+                    item["title"] = item.pop("qualification")
+                if "experience" in item:
+                    item["experience_years"] = item.pop("experience")
+                if "specialization" in item:
+                    item["specialty"] = item["specialization"]
+                    item["department"] = item["specialization"]
+                    del item["specialization"]
+                if "profile_image" in item:
+                    item["photo_url"] = item.pop("profile_image")
+            if "id" in item:
+                item["id"] = to_uuid(item["id"])
+            if "hospital_id" in item:
+                item["hospital_id"] = to_uuid(item["hospital_id"])
+            if "department_id" in item:
+                item["department_id"] = to_uuid(item["department_id"])
+            if "doctor_id" in item:
+                item["doctor_id"] = to_uuid(item["doctor_id"])
+            if "package_id" in item:
+                item["package_id"] = to_uuid(item["package_id"])
+            if "test_id" in item:
+                item["test_id"] = to_uuid(item["test_id"])
+            mapped_records.append(item)
+            
         try:
-            print(f"Upserting {len(records)} records into table '{table_name}'...")
-            res = supabase_client.table(table_name).upsert(records).execute()
-            print(f"✓ Table '{table_name}' seeded successfully.")
+            print(f"Upserting {len(mapped_records)} records into table '{table_name}'...")
+            res = supabase_client.table(table_name).upsert(mapped_records).execute()
+            print(f"[OK] Table '{table_name}' seeded successfully.")
         except Exception as e:
             print(f"Note/Error seeding '{table_name}': {e}")
 

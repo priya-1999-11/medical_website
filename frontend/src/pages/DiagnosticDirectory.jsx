@@ -78,11 +78,11 @@ const DiagnosticDirectory = () => {
             </div>
 
             <h1 className="font-headline text-4xl md:text-6xl font-black tracking-tight mb-4 leading-tight">
-              Diagnostic Health <span className="bg-gradient-to-r from-blue-400 to-blue-200 text-transparent bg-clip-text">Checkup Packages</span>
+              Proactive Screenings & <span className="bg-gradient-to-r from-blue-400 to-blue-200 text-transparent bg-clip-text">Health Panels</span>
             </h1>
 
             <p className="text-slate-300 text-base md:text-lg max-w-2xl font-medium leading-relaxed">
-              Explore 75+ parameter full-body checkups, cardiac profiles, diabetic monitoring, and specialized pathology panels with free home sample collection.
+              Empower your lifestyle with targeted metabolic tests, pathology panels, and home collections designed for prevention.
             </p>
 
             <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-4">
@@ -183,7 +183,7 @@ const DiagnosticDirectory = () => {
           <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-200">
             <div>
               <h2 className="font-headline font-black text-2xl text-slate-900 tracking-tight">
-                Verified Health Checkup Packages
+                Wellness Screening Programs
               </h2>
               <p className="text-xs text-slate-500 font-medium">
                 Showing {filteredPackages.length} packages loaded dynamically from database
@@ -206,6 +206,14 @@ const DiagnosticDirectory = () => {
                   <div className="h-10 bg-slate-200 rounded-xl" />
                 </div>
               ))}
+            </div>
+          ) : packages.length === 0 ? (
+            <div className="bg-white rounded-3xl p-16 text-center border border-slate-200/80 shadow-sm space-y-4 max-w-xl mx-auto">
+              <TestTube className="w-12 h-12 text-slate-300 mx-auto" />
+              <h3 className="font-headline font-bold text-lg text-slate-900">No Diagnostic Packages Available.</h3>
+              <p className="text-xs text-slate-500 font-medium">
+                Please check back later or contact hospital support.
+              </p>
             </div>
           ) : filteredPackages.length === 0 ? (
             <div className="bg-white rounded-3xl p-16 text-center border border-slate-200/80 shadow-sm space-y-4 max-w-xl mx-auto">

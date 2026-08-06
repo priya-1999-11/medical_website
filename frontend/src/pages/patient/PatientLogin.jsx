@@ -175,7 +175,7 @@ const PatientLogin = () => {
               className="text-slate-600 font-bold hover:text-primary transition-colors"
             >
               {isLogin ? (
-                <>New patient? <span className="text-primary underline">Join clinical serenity</span></>
+                <>New patient? <span className="text-primary underline">Join Prana Health Network</span></>
               ) : (
                 <>Already have an account? <span className="text-primary underline">Sign in here</span></>
               )}

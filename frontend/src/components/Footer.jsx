@@ -60,12 +60,12 @@ const Footer = () => {
               <img
                 src="/prana_logo.png"
                 alt="PRANA Healthcare Services"
-                className="h-10 w-auto object-contain"
+                className="h-12 w-auto object-contain"
               />
             </Link>
 
             <p className="text-blue-200 text-sm leading-relaxed max-w-md">
-              Pioneering the future of patient-centric healthcare through precision diagnostics, vital minimalism, and clinical excellence. ISO 9001 certified healthcare institution.
+              Pioneering the future of patient-centric healthcare through precision diagnostics, integrated systems, and clinical board supervision. ISO 9001 certified healthcare institution.
             </p>
 
             {/* Badges */}
@@ -173,8 +173,8 @@ const Footer = () => {
               </div>
               <div className="flex gap-3 items-center">
                 <Mail className="w-5 h-5 text-[#4D9B2A] shrink-0" />
-                <a href="mailto:care@clinicalserenity.com" className="hover:text-white transition-colors">
-                  care@clinicalserenity.com
+                <a href="mailto:care@pranahealthnetwork.com" className="hover:text-white transition-colors">
+                  care@pranahealthnetwork.com
                 </a>
               </div>
             </div>
@@ -184,7 +184,7 @@ const Footer = () => {
         {/* Bottom Bar: Copyright & Legal */}
         <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-blue-300">
           <div>
-            © 2026 Clinical Serenity Healthcare Network. All rights reserved.
+            © 2026 Prana Health Network. All rights reserved.
           </div>
           
           <div className="flex items-center gap-6 text-blue-200 font-medium">

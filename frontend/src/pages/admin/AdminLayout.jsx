@@ -8,7 +8,8 @@ import {
   MdLogout,
   MdShield,
   MdMedicalServices,
-  MdSettings
+  MdSettings,
+  MdPhotoLibrary
 } from 'react-icons/md';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -34,6 +35,7 @@ const AdminLayout = () => {
     { name: 'Diagnostic Packages', path: '/admin/packages', icon: <MdMedicalServices size={20} /> },
     { name: 'Appointments', path: '/admin/appointments', icon: <MdEvent size={20} /> },
     { name: 'Patients', path: '/admin/patients', icon: <MdPeople size={20} /> },
+    { name: 'Hero Slider', path: '/admin/slider', icon: <MdPhotoLibrary size={20} /> },
     { name: 'Settings', path: '/admin/settings', icon: <MdSettings size={20} /> },
   ];
 
@@ -90,7 +92,7 @@ const AdminLayout = () => {
             <h2 className="ml-4 font-bold text-slate-900">Admin Panel</h2>
           </div>
           <div className="hidden md:block">
-            <h1 className="text-xl font-bold text-slate-800 tracking-tight">Clinical Serenity Portal</h1>
+            <h1 className="text-xl font-bold text-slate-800 tracking-tight">Prana Health Portal</h1>
           </div>
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 bg-slate-200 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm text-slate-600 font-bold">

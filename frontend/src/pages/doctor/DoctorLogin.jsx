@@ -128,7 +128,7 @@ const DoctorLogin = () => {
         </div>
 
         <div className="mt-12 text-center text-slate-400 text-sm font-medium">
-          Professional Medical Portal • Clinical Serenity Hospital
+          Professional Medical Portal • Prana Health Network
         </div>
       </div>
     </div>

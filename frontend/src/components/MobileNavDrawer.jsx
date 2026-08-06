@@ -26,7 +26,7 @@ const MobileNavDrawer = ({ isOpen, onClose, departments = [], user, onNavigate }
             <img
               src="/prana_logo.png"
               alt="PRANA Healthcare Services"
-              className="h-9 w-auto object-contain"
+              className="h-11 w-auto object-contain"
             />
           </Link>
           <button 
@@ -139,16 +139,18 @@ const MobileNavDrawer = ({ isOpen, onClose, departments = [], user, onNavigate }
 
         {/* Footer Actions */}
         <div className="p-4 border-t border-slate-100 bg-slate-50/60 space-y-3">
-          <button
-            onClick={() => {
-              onClose();
-              onNavigate(user ? '/patient-dashboard' : '/patient-login');
-            }}
-            className="w-full bg-[#275B99] hover:bg-[#1F4B80] text-white py-3 px-4 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 active:scale-95"
-          >
-            <User className="w-4 h-4" />
-            <span>{user ? 'Patient Dashboard' : 'Book Consultation'}</span>
-          </button>
+          {!user && (
+            <button
+              onClick={() => {
+                onClose();
+                onNavigate('/patient-login');
+              }}
+              className="w-full bg-[#275B99] hover:bg-[#1F4B80] text-white py-3 px-4 rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 active:scale-95"
+            >
+              <User className="w-4 h-4" />
+              <span>Book Consultation</span>
+            </button>
+          )}
           
           <div className="text-center text-[10px] font-medium text-slate-400">
             Open Mon-Sun: 24 Hours Emergency Care

@@ -103,22 +103,40 @@ const HospitalCard = ({ hospital }) => {
       </div>
 
       {/* Action CTA Row */}
-      <div className="p-6 pt-0 grid grid-cols-2 gap-2.5">
-        <Link
-          to={`/hospitals/${hospital.id}`}
-          className="py-3 px-4 bg-blue-50 hover:bg-blue-100 text-[#275B99] rounded-xl font-bold text-xs transition-all text-center flex items-center justify-center gap-1.5"
-        >
-          <Building2 className="w-3.5 h-3.5 text-[#275B99]" />
-          <span>Hospital Details</span>
-        </Link>
+      <div className="p-6 pt-0 space-y-2.5">
+        <div className="grid grid-cols-2 gap-2.5">
+          <Link
+            to={`/hospitals/${hospital.id}`}
+            className="py-3 px-4 bg-blue-50 hover:bg-blue-100 text-[#275B99] rounded-xl font-bold text-xs transition-all text-center flex items-center justify-center gap-1.5"
+          >
+            <Building2 className="w-3.5 h-3.5 text-[#275B99]" />
+            <span>Hospital Details</span>
+          </Link>
 
-        <Link
-          to={`/book-appointment?hospitalId=${hospital.id}`}
-          className="py-3 px-4 bg-[#275B99] hover:bg-[#4D9B2A] text-white rounded-xl font-bold text-xs transition-all shadow-md text-center flex items-center justify-center gap-1.5 active:scale-95"
-        >
-          <span>Book Visit</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </Link>
+          <Link
+            to={`/book-appointment?hospitalId=${hospital.id}`}
+            className="py-3 px-4 bg-[#275B99] hover:bg-[#4D9B2A] text-white rounded-xl font-bold text-xs transition-all shadow-md text-center flex items-center justify-center gap-1.5 active:scale-95"
+          >
+            <span>Book Visit</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        {hospital.website ? (
+          <a
+            href={hospital.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-xs transition-all text-center flex items-center justify-center gap-1.5 border border-slate-200"
+          >
+            <span>Visit Website</span>
+            <ArrowRight className="w-3 h-3 text-slate-500" />
+          </a>
+        ) : (
+          <div className="w-full py-2.5 bg-slate-50 text-slate-400 rounded-xl font-medium text-xs text-center border border-slate-100 select-none">
+            Website Not Available
+          </div>
+        )}
       </div>
     </div>
   );
