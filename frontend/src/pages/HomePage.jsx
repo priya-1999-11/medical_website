@@ -28,10 +28,47 @@ const HomePage = () => {
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
   const [selectedWhyChoose, setSelectedWhyChoose] = useState(null);
   
-  // Hero Slider states
-  const [sliderImages, setSliderImages] = useState([]);
+  // Hero Slider states and synchronized slides definition
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [sliderAutoplay, setSliderAutoplay] = useState(true);
+
+  const heroSlides = [
+    {
+      id: 1,
+      badge: "PRANA Healthcare Services Network",
+      line1: "Integrated Care Built Around",
+      line2Prefix: "You ",
+      line2Amp: "&",
+      line2Suffix: " Your Loved Ones",
+      hasAmp: true,
+      subtitle: "A unified ecosystem of clinical experts, modern hospital campuses, and transparent medical coverage. Caring for you at every milestone.",
+      image_url: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?q=80&w=1600&auto=format&fit=crop",
+      cardTitle: "State-of-the-Art Hospital Plaza",
+      cardSubtitle: "PRANA Partner Network • 24 Hours"
+    },
+    {
+      id: 2,
+      badge: "Advanced Facilities & Expert Care",
+      line1: "Advanced Hospitals,",
+      line2: "Trusted Care",
+      hasAmp: false,
+      subtitle: "Explore leading hospitals equipped with modern facilities, experienced specialists, and patient-focused healthcare services.",
+      image_url: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1600&auto=format&fit=crop",
+      cardTitle: "Modern Multi-Specialty Campus",
+      cardSubtitle: "Advanced Operating & ICU Facilities"
+    },
+    {
+      id: 3,
+      badge: "Connected Healthcare Network",
+      line1: "Right Hospital,",
+      line2: "Right Care, Right Time",
+      hasAmp: false,
+      subtitle: "Find the right hospital and specialist for your healthcare needs with a simpler, more connected care experience.",
+      image_url: "https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=1600&auto=format&fit=crop",
+      cardTitle: "Specialist Care Network",
+      cardSubtitle: "Personalized Patient Healthcare Services"
+    }
+  ];
 
   useEffect(() => {
     const loadHomepageData = async () => {
@@ -43,18 +80,11 @@ const HomePage = () => {
         const pkgData = await packageService.getPackages();
         const provData = await insuranceService.getProviders();
 
-        const { data: sliderData } = await supabase
-          .from('hero_slider_images')
-          .select('*')
-          .eq('is_active', true)
-          .order('display_order', { ascending: true });
-
         setDoctors(docData || []);
         setDepartments(deptData || []);
         setHospitals(hospData ? hospData.slice(0, 3) : []);
         setPackages(pkgData ? pkgData.slice(0, 3) : []);
         setInsuranceProviders(provData || []);
-        setSliderImages(sliderData || []);
       } catch (err) {
         console.error('Error loading homepage data:', err);
       } finally {
@@ -64,21 +94,13 @@ const HomePage = () => {
     loadHomepageData();
   }, []);
 
-  const defaultSlide = {
-    title: "State-of-the-Art Hospital Plaza",
-    image_url: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1200&auto=format&fit=crop",
-    subtitle: "Main Campus • Open 24 Hours"
-  };
-
-  const activeSlides = sliderImages.length > 0 ? sliderImages : [defaultSlide];
-
   useEffect(() => {
-    if (!sliderAutoplay || activeSlides.length <= 1) return;
+    if (!sliderAutoplay) return;
     const interval = setInterval(() => {
-      setCurrentSlideIndex((prev) => (prev + 1) % activeSlides.length);
-    }, 2500);
+      setCurrentSlideIndex((prev) => (prev + 1) % heroSlides.length);
+    }, 4500);
     return () => clearInterval(interval);
-  }, [sliderAutoplay, activeSlides.length]);
+  }, [sliderAutoplay, heroSlides.length]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -130,24 +152,53 @@ const HomePage = () => {
             <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
               
               {/* Hero Left Content */}
-              <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+              <div 
+                className="lg:col-span-7 space-y-6 text-center lg:text-left overflow-hidden"
+                onMouseEnter={() => setSliderAutoplay(false)}
+                onMouseLeave={() => setSliderAutoplay(true)}
+              >
                 
-                {/* Hospital Badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-[#4D9B2A] text-xs font-bold tracking-wide">
+                {/* Hospital Badge - Synchronized with active slide */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-[#4D9B2A] text-xs font-bold tracking-wide transition-all duration-500">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#4D9B2A] animate-pulse" />
-                  <span className="text-white">PRANA Healthcare Services Network</span>
+                  <span className="text-white">{heroSlides[currentSlideIndex].badge}</span>
                 </div>
 
-                {/* Main Headline */}
-                <h1 className="font-headline text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-white leading-[1.15]">
-                  <span style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}>Integrated Care Built Around</span> <br />
-                  <span className="text-[#4d9b2a]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}>You <span style={{ fontFamily: "'Manrope', sans-serif" }}>&</span> Your Loved Ones</span>
-                </h1>
+                {/* Synchronized Hero Text Horizontal Carousel Track */}
+                <div className="overflow-hidden w-full">
+                  <div 
+                    className="flex transition-transform duration-600 ease-in-out"
+                    style={{ transform: `translateX(-${currentSlideIndex * 100}%)` }}
+                  >
+                    {heroSlides.map((slide) => (
+                      <div
+                        key={slide.id}
+                        className="w-full shrink-0 flex-none space-y-3"
+                      >
+                        {/* Main Headline */}
+                        <h1 className="font-headline text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-white leading-[1.15]">
+                          <span style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}>{slide.line1}</span> <br />
+                          <span className="text-[#4d9b2a]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}>
+                            {slide.hasAmp ? (
+                              <>
+                                {slide.line2Prefix}
+                                <span style={{ fontFamily: "'Manrope', sans-serif" }}>{slide.line2Amp}</span>
+                                {slide.line2Suffix}
+                              </>
+                            ) : (
+                              slide.line2
+                            )}
+                          </span>
+                        </h1>
 
-                {/* Subtitle */}
-                <p className="text-slate-300 text-base md:text-lg max-w-xl font-normal leading-relaxed mx-auto lg:mx-0">
-                  A unified ecosystem of clinical experts, modern hospital campuses, and transparent medical coverage. Caring for you at every milestone.
-                </p>
+                        {/* Subtitle */}
+                        <p className="text-slate-300 text-base md:text-lg max-w-xl font-normal leading-relaxed mx-auto lg:mx-0">
+                          {slide.subtitle}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
                 {/* Search Box */}
                 <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 shadow-2xl border border-white/10 max-w-xl mx-auto lg:mx-0 text-left">
@@ -231,57 +282,58 @@ const HomePage = () => {
                   onMouseEnter={() => setSliderAutoplay(false)}
                   onMouseLeave={() => setSliderAutoplay(true)}
                 >
-                  {/* Slider Images with fade transition */}
-                  {activeSlides.map((slide, idx) => (
-                    <div
-                      key={slide.id || idx}
-                      className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                        idx === currentSlideIndex ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
-                      }`}
-                    >
-                      <img
-                        src={slide.image_url}
-                        alt={slide.title || "PRANA Healthcare Services"}
-                        className="w-full h-full object-cover opacity-90"
-                      />
-                      
-                      {/* Banner overlay label */}
-                      <div className="absolute bottom-5 left-5 right-5 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-100 shadow-lg flex items-center gap-3 z-20">
-                        <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#275B99] flex items-center justify-center shrink-0">
-                          <Building2 className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <h4 className="font-headline font-bold text-slate-900 text-sm">
-                            {slide.title || "State-of-the-Art Hospital Plaza"}
-                          </h4>
-                          <p className="text-[11px] text-[#4D9B2A] font-semibold">
-                            {slide.subtitle || "PRANA Partner Network • 24 Hours"}
-                          </p>
+                  {/* Slider Track with horizontal slide transition */}
+                  <div 
+                    className="flex h-full w-full transition-transform duration-600 ease-in-out"
+                    style={{ transform: `translateX(-${currentSlideIndex * 100}%)` }}
+                  >
+                    {heroSlides.map((slide) => (
+                      <div
+                        key={slide.id}
+                        className="relative w-full h-full shrink-0 flex-none"
+                      >
+                        <img
+                          src={slide.image_url}
+                          alt={slide.cardTitle}
+                          className="w-full h-full object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-105"
+                        />
+                        
+                        {/* Banner overlay label */}
+                        <div className="absolute bottom-5 left-5 right-5 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-100 shadow-lg flex items-center gap-3 z-20">
+                          <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#275B99] flex items-center justify-center shrink-0">
+                            <Building2 className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <h4 className="font-headline font-bold text-slate-900 text-sm">
+                              {slide.cardTitle}
+                            </h4>
+                            <p className="text-[11px] text-[#4D9B2A] font-semibold">
+                              {slide.cardSubtitle}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                  
+                    ))}
+                  </div>
+
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent z-10 pointer-events-none" />
                 </div>
 
                 {/* Navigation dots below the slider */}
-                {activeSlides.length > 1 && (
-                  <div className="flex gap-2.5 mt-4 z-20 relative">
-                    {activeSlides.map((_, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setCurrentSlideIndex(idx)}
-                        className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                          idx === currentSlideIndex 
-                            ? 'bg-[#4D9B2A] w-6' 
-                            : 'bg-white/40 hover:bg-white/75'
-                        }`}
-                        title={`Go to slide ${idx + 1}`}
-                      />
-                    ))}
-                  </div>
-                )}
+                <div className="flex gap-2.5 mt-4 z-20 relative">
+                  {heroSlides.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentSlideIndex(idx)}
+                      className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                        idx === currentSlideIndex 
+                          ? 'bg-[#4D9B2A] w-6' 
+                          : 'bg-white/40 hover:bg-white/75'
+                      }`}
+                      title={`Go to slide ${idx + 1}`}
+                    />
+                  ))}
+                </div>
 
                 {/* Floating Badge — Rating */}
                 <div className="absolute -top-4 -right-2 sm:right-2 bg-white p-3.5 px-5 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-3 z-30 pointer-events-none">
