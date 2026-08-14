@@ -130,8 +130,8 @@ const InsuranceDirectory = () => {
 
                 <div className="pt-2 border-t border-slate-700 flex items-center justify-between text-xs">
                   <span className="text-slate-400 font-medium">Hotline Support:</span>
-                  <a href="tel:+18005550199" className="font-bold text-blue-400 hover:underline">
-                    +1 (800) 555-0199
+                  <a href="tel:7095777377" className="font-bold text-blue-400 hover:underline">
+                    7095777377
                   </a>
                 </div>
               </div>

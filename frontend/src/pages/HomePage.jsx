@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
@@ -31,6 +31,10 @@ const HomePage = () => {
   // Hero Slider states and synchronized slides definition
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [sliderAutoplay, setSliderAutoplay] = useState(true);
+
+  // Typewriter animation states for the green highlighted hero text
+  const [typewriterText, setTypewriterText] = useState('');
+  const sliderAutoplayRef = useRef(true);  // mirror of sliderAutoplay for closure-safe reads
 
   const heroSlides = [
     {
@@ -94,13 +98,67 @@ const HomePage = () => {
     loadHomepageData();
   }, []);
 
+  // Keep the ref mirror in sync whenever sliderAutoplay state changes
   useEffect(() => {
-    if (!sliderAutoplay) return;
-    const interval = setInterval(() => {
-      setCurrentSlideIndex((prev) => (prev + 1) % heroSlides.length);
-    }, 4500);
-    return () => clearInterval(interval);
-  }, [sliderAutoplay, heroSlides.length]);
+    sliderAutoplayRef.current = sliderAutoplay;
+  }, [sliderAutoplay]);
+
+  // Typewriter animation — self-synchronizing, production-safe
+  useEffect(() => {
+    const phrases = heroSlides.map((slide) =>
+      slide.hasAmp
+        ? `${slide.line2Prefix}${slide.line2Amp}${slide.line2Suffix}`
+        : slide.line2
+    );
+
+    const fullPhrase = phrases[currentSlideIndex];
+    let charIdx = 0;
+    let isDeleting = false;
+    let timer = null;
+
+    const tick = () => {
+      // If paused by hover, poll every 200 ms until resumed
+      if (!sliderAutoplayRef.current) {
+        timer = setTimeout(tick, 200);
+        return;
+      }
+
+      if (!isDeleting) {
+        // Typing forward
+        if (charIdx < fullPhrase.length) {
+          charIdx++;
+          setTypewriterText(fullPhrase.slice(0, charIdx));
+          timer = setTimeout(tick, 75); // typing speed
+        } else {
+          // Finished typing: pause before deleting
+          isDeleting = true;
+          timer = setTimeout(tick, 1800); // pause typed
+        }
+      } else {
+        // Deleting backward
+        if (charIdx > 0) {
+          charIdx--;
+          setTypewriterText(fullPhrase.slice(0, charIdx));
+          timer = setTimeout(tick, 40); // deleting speed
+        } else {
+          // Finished deleting: move to next slide
+          isDeleting = false;
+          timer = setTimeout(() => {
+            setCurrentSlideIndex((prev) => (prev + 1) % phrases.length);
+          }, 350); // pause before typing next
+        }
+      }
+    };
+
+    // Reset typewriter text and start typing the current phrase
+    setTypewriterText('');
+    timer = setTimeout(tick, 75);
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSlideIndex]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -178,15 +236,37 @@ const HomePage = () => {
                         {/* Main Headline */}
                         <h1 className="font-headline text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-white leading-[1.15]">
                           <span style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}>{slide.line1}</span> <br />
-                          <span className="text-[#4d9b2a]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}>
-                            {slide.hasAmp ? (
+                          {/* Typewriter animated green highlighted text — only shown on the active slide */}
+                          <span
+                            className="text-[#4d9b2a] inline-block"
+                            style={{
+                              fontFamily: "'Playfair Display', serif",
+                              fontWeight: 700,
+                              /* Reserve a stable minimum width so the heading doesn't shift */
+                              minWidth: '2ch',
+                              verticalAlign: 'bottom',
+                            }}
+                          >
+                            {slide.id === heroSlides[currentSlideIndex].id ? (
                               <>
-                                {slide.line2Prefix}
-                                <span style={{ fontFamily: "'Manrope', sans-serif" }}>{slide.line2Amp}</span>
-                                {slide.line2Suffix}
+                                {typewriterText}
+                                {/* Blinking cursor */}
+                                <span
+                                  style={{
+                                    display: 'inline-block',
+                                    width: '2px',
+                                    height: '0.9em',
+                                    background: '#4d9b2a',
+                                    marginLeft: '2px',
+                                    verticalAlign: 'middle',
+                                    borderRadius: '1px',
+                                    animation: 'twCursorBlink 0.75s step-end infinite',
+                                  }}
+                                />
                               </>
                             ) : (
-                              slide.line2
+                              /* Non-active slides show nothing (they are offscreen anyway) */
+                              '\u00A0'
                             )}
                           </span>
                         </h1>

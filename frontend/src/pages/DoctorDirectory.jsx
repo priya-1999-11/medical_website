@@ -181,7 +181,7 @@ const DoctorDirectory = () => {
               <div className="text-[11px] text-slate-500 font-medium">Need help finding the right doctor?</div>
               <button 
                 type="button" 
-                onClick={() => alert('Care Manager Helpline: Call +1 (800) SERENITY for instant specialist matching.')}
+                onClick={() => alert('Care Manager Helpline: Call 7095777377 for instant specialist matching.')}
                 className="px-3.5 py-1.5 bg-blue-700 hover:bg-blue-800 text-white font-bold text-[11px] rounded-xl transition-all shadow-sm active:scale-95"
               >
                 Talk to Expert
@@ -345,7 +345,7 @@ const DoctorDirectory = () => {
               <p className="text-[11px] opacity-90 leading-relaxed">Our advisory desks are available 24/7 to guide your choice.</p>
               <button 
                 type="button"
-                onClick={() => alert('helpline: +1 (800) SERENITY')}
+                onClick={() => alert('helpline: 7095777377')}
                 className="w-full py-2.5 bg-white text-blue-800 font-extrabold rounded-xl text-xs hover:bg-blue-50 transition-colors shadow-sm"
               >
                 Talk to Care Expert

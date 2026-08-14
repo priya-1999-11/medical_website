@@ -265,7 +265,7 @@ const HospitalDetailsPage = () => {
                   </div>
                   <h4 className="font-headline font-bold text-slate-900 text-base">Emergency Hotline</h4>
                   <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                    Direct Trauma Desk: <span className="font-bold text-slate-900">{hospital.phone || '+1 (800) SERENITY'}</span>
+                    Direct Trauma Desk: <span className="font-bold text-slate-900">{hospital.phone || '7095777377'}</span>
                   </p>
                 </div>
               </div>

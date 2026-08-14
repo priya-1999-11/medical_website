@@ -436,7 +436,7 @@ const AdminHospitals = () => {
                   <label className="font-bold text-slate-700 uppercase">Phone Number</label>
                   <input
                     type="text"
-                    placeholder="+1 (800) SERENITY"
+                    placeholder="7095777377"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-600 outline-none"

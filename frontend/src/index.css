@@ -17,6 +17,12 @@
     animation: bounce-subtle 3s infinite;
   }
 
+  /* Typewriter blinking cursor for hero section */
+  @keyframes twCursorBlink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
   .glass-card {
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(16px);

@@ -44,8 +44,8 @@ const MobileNavDrawer = ({ isOpen, onClose, departments = [], user, onNavigate }
           </div>
           <div>
             <div className="text-[10px] font-bold text-[#4D9B2A] uppercase tracking-wider">24/7 Helpline</div>
-            <a href="tel:+180073736489" className="text-sm font-extrabold text-slate-900 hover:underline">
-              +1 (800) SERENITY
+            <a href="tel:7095777377" className="text-sm font-extrabold text-slate-900 hover:underline">
+              7095777377
             </a>
           </div>
         </div>

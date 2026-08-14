@@ -55,12 +55,12 @@ const NavBar = () => {
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <div className="flex items-center gap-6">
               <a 
-                href="tel:+180073736489" 
+                href="tel:7095777377" 
                 className="flex items-center gap-1.5 hover:text-green-200 transition-colors"
               >
                 <Phone className="w-3.5 h-3.5 text-white" />
                 <span className="font-semibold text-blue-100">24/7 Helpline:</span>
-                <span className="font-bold text-white tracking-wide">+1 (800) SERENITY</span>
+                <span className="font-bold text-white tracking-wide">7095777377</span>
               </a>
 
               <div className="hidden md:flex items-center gap-1.5 text-blue-100">
